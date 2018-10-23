@@ -1,0 +1,207 @@
+---
+title: "Homework #3"
+author: "Glenn Clapp"
+due: "20 September, 2018"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE,error=FALSE}
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(readr)
+library(moments)
+library(reticulate) # Allows python and R to share namespace
+knitr::knit_engines$set(Python = reticulate::eng_python) # Tells the knit function about the python engine
+```
+
+5.3.2: 
+Given a finite, normally distributed population with a mean of 183, a population standard deviation of 37 and a sample size of 60 with no replacement.
+```{r}
+u = 183
+SD = 37
+variance = SD^2
+n = 60
+
+sample_u = u
+sample_SD = SD/sqrt(n)
+
+A = pnorm(195,lower.tail=T, mean=sample_u, sd=sample_SD) - pnorm(170,lower.tail=T, mean=sample_u, sd=sample_SD)
+
+B = pnorm(175,lower.tail=T, mean=sample_u, sd=sample_SD)
+
+C = pnorm(190,lower.tail=F, mean=sample_u, sd=sample_SD)
+
+print(A)
+print(B)
+print(C)
+
+print(A+B+C) # Should this equal 1?
+```
+
+5.3.6:
+Given a finite, normally distributed population with a mean of 100, a standard deviation of 20, and a sample size of 16 with no replacement.
+```{r}
+u = 100
+SD = 20
+n = 16
+
+sample_u = u
+sample_SD = SD/sqrt(n)
+
+A = pnorm(100,lower.tail=F, mean=sample_u, sd=sample_SD)
+
+B = pnorm(110,lower.tail=T, mean=sample_u, sd=sample_SD)
+
+C = pnorm(108,lower.tail=T, mean=sample_u, sd=sample_SD) - pnorm(96,lower.tail=T, mean=sample_u, sd=sample_SD)
+
+print(A)
+print(B)
+print(C)
+```
+
+5.3.8: Given the data set {1,3,5,7,9} construct the sampling distribution of x_bar based on samples of size 2 without replacement. Find the mean and variance of the sampling distribution.
+```{r}
+small_data = data.frame(
+  numbers = c(1,3,5,7,9)
+)
+u = mean(small_data$numbers)
+SD = sd(small_data$numbers)
+n = 2
+N = 5
+
+sample_u = u
+sample_SD = (SD/sqrt(n))*((N-n)/(N-1))^0.5
+sample_variance = sample_SD^2
+
+print(sample_u)
+print(sample_variance)
+```
+
+5.3.10: Given a finite, normally distributed population with a mean of 183, a population standard deviation of 37 and a sample size of 5,25,50,100,500 with no replacement. Calculate the standard error for each sample size, discuss the implications.
+```{Python}
+SD = 37
+n_list = [5,25,50,100,500]
+for n in n_list:
+  se = SD/n**0.5
+  print("n: ",n,"Standard error: ",se)
+
+```
+The standard error shrinks as the sample size increases. This means that sample size can be increased to increase the precision of one's results.
+
+5.4.2: Men = N(797,482), Women = N(660,414), n_men = 40, n_women = 35, Find P(xbar_men - xbar_women > 100)
+```{r}
+u1 = 797
+sd1 = 482
+n1 = 40
+
+u2 = 660
+sd2 = 414
+n2 = 35
+
+u_diff = u1 - u2
+sd_diff = (sd1^2/n1 + sd2^2/n2)^0.5
+
+print(u_diff)
+print(sd_diff)
+
+P = pnorm(100,lower.tail=F, mean=u_diff, sd=sd_diff)
+
+print(P)
+```
+
+5.4.4: variance1 = 100, variance2 = 80, equal means, n1 = 40, n2 = 35. Find P(xbar1-xbar2 > 12)
+```{r}
+sd1 = 100^0.5
+n1 = 40
+
+sd2 = 80^0.5
+n2 = 35
+
+u_diff = 0
+sd_diff = (sd1^2/n1 + sd2^2/n2)^0.5
+
+print(u_diff)
+print(sd_diff)
+
+P = pnorm(12,lower.tail=F, mean=u_diff, sd=sd_diff)
+
+print(P)
+```
+
+Review 12:
+In the study cited in exercise 11, the researchers reported the mean BMI for men ages 60 and older with normal skeletal muscle index to be 24.7 with a standard deviation of 3.3. Using these values as the population man and standard deviation, find the probability that 50 randomly selected men in this age range with normal skeletal muscle index will have a mean BMI less than 24
+```{r}
+u_BMI = 24.7
+sd_BMI = 3.3
+n = 50
+
+sample_u = u_BMI
+sample_SD = sd_BMI/sqrt(n)
+
+P = pnorm(24,lower.tail=T, mean=sample_u, sd=sample_SD)
+print(P)
+```
+
+Review 16:
+Using the information in Review Exercises 14 and 15, and assuming independent ransdom samples of size 100 and 120 for women and men, respectively, find the probability that the difference in sample eman iron levels is greater than 5 mg.
+```{r}
+u_women = 13.7
+sd_women = 8.9
+n_women = 100
+
+u_men = 17.9
+sd_men = 10.9
+n_men = 120
+
+u_diff = u_men - u_women
+sd_diff = (sd_women^2/n_women + sd_men^2/n_men)^0.5
+
+print(u_diff)
+print(sd_diff)
+
+P = pnorm(5,lower.tail=F, mean=u_diff, sd=sd_diff)
+
+print(P)
+```
+Review 28:
+
+For each of the following populations of measurements, state whether the sampling distribution of the sample mean is normally distributed, approximately normally distributed, or not approximately normally distributed when computed from samples of size A. 10 B. 50, and C. 200.
+
+The logarithm of metabolic ratios. The population is normally distributed:
+
+A. Normal
+
+B. Normal
+
+C. Normal
+
+
+Resting vagal tone in healthy adults. The population is normally distributed:
+
+A. Normal
+
+B. Normal
+
+C. Normal
+
+
+Insulin action in obese subjects. The population is not normally distributed.
+
+A. Not normal
+
+B. Approx. normal
+
+C. Normal
+
+
+
+
+

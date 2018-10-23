@@ -1,0 +1,36 @@
+---
+title: "Exam 1"
+author: "Glenn Clapp"
+date: October 04, 2018"
+output: pdf_document
+---
+
+```{r}
+library(tidyverse)
+library(mosaic)
+library(reticulate) # Allows python and R to share namespace
+knitr::knit_engines$set(Python = reticulate::eng_python) # Tells the knit function about the python engine
+```
+
+```{r}
+n <-25
+ts <- -qt((1-.95)/2,lower.tail=TRUE,df=n-1)
+ts90 <- -qt((1-.90)/2,lower.tail=TRUE,df=n-1)
+print(ts90)
+((24*2.9^2 + 24*2.4^2)/48)^0.5
+
+
+n_patients = 10
+ts <- -qt((1-0.99)/2,lower.tail = T, df = n_patients-1)
+print(ts)
+
+sp = 1.342
+ci = 1.2 + c(-1,1)*3.25*(sp/10^0.5)
+print(ci)
+
+pnorm(-1.577)
+help(pnorm)
+
+
+pnorm(-3.526)
+```

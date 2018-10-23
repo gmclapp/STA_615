@@ -1,0 +1,154 @@
+---
+title: "Confidence intervals for one or two means"
+author: "D. Zeitler"
+date: "September 20, 2018"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup}
+library(mosaic)
+```
+
+# Example 6.2.4
+
+```{r ex6.2.4}
+ex6.2.4 <- read.csv('EXA_C06_S02_04.csv')
+```
+
+Define a shorthand (function) to plot a histogram with a normal curve.
+```{r}
+myhist <- function(formula,data,xl='x-variable'){
+  gf_fitdistr(formula,data=data,dist = 'norm') %>%
+    gf_dhistogram(xlab=xl)
+}
+```
+
+```{r}
+myhist(~ACTIVITY,data=ex6.2.4,'micromoles/minute/gram of tissue')
+```
+
+```{r}
+# Assuming the standard deviation is .6 and using the Z-distribution
+#with(ex6.2.4,{
+  n <-nrow(ex6.2.4)
+  mu <- mean(~ACTIVITY,data=ex6.2.4)
+  std <- sd(~ACTIVITY,data=ex6.2.4)
+  zs <- qnorm((1-.05/2),lower.tail=TRUE)
+  lower.ci <- mu-zs*(0.6/sqrt(n))
+  upper.ci <- mu+zs*(0.6/sqrt(n))
+  print( data.frame(
+    n=n,
+    mean=mu,
+    std.dev=std,
+    lower.ci=lower.ci,
+    upper.ci=upper.ci
+  ))
+  myhist(~ACTIVITY,data=ex6.2.4) %>%
+    gf_labs(title='micromoles/minute/gram of tissue') %>%
+    gf_vline(xintercept = c(lower.ci,upper.ci))
+```
+
+# The t-distribution
+
+When using the sample standard deviation, we need the t-distribution. It is shaped like the normal, but gets wider (higher standard deviation) for smaller sample sizes. Above n of about 30 it is nearly the same as the normal and at n equal to infinity it is exactly the normal. 
+
+Play around with the degrees of freedom below to see how they compare. Note that 'Inf' is infinity where the t and the standard normal are identical.
+```{r}
+gf_dist(dist='norm',col='blue') %>%
+  gf_dist(dist='t',df=2) %>% # DOF = n-1
+  gf_dist(dist='t',df=5,col='red') %>%
+  gf_lims(x=c(-10,10)) # This sets the limits of the x axis.
+```
+
+Looking back at the previous data, we can use the sample standard deviation for the confidence interval and the t-distribution for the multiplier.
+```{r}
+  n <-nrow(ex6.2.4)
+  mu <- mean(~ACTIVITY,data=ex6.2.4)
+  std <- sd(~ACTIVITY,data=ex6.2.4)
+  ts <- -qt((1-.95)/2,df=n-1,lower.tail=TRUE)
+  lower.ci=mu-ts*(std/sqrt(n))
+  upper.ci=mu+ts*(std/sqrt(n))
+  ( data.frame(
+    n=n,
+    mean=mu,
+    std.dev=std,
+    lower.ci=lower.ci,
+    upper.ci=upper.ci
+  ))
+  myhist(~ACTIVITY,data=ex6.2.4) %>%
+    gf_labs(title='micromoles/minute/gram of tissue') %>%
+    gf_vline(xintercept = c(lower.ci,upper.ci))
+```
+
+Or more simply, just use the one sample t-test
+```{r}
+t.test(~ACTIVITY,data=ex6.2.4,conf.level=0.997)
+```
+
+Comparing z and t multipliers.
+```{r}
+n <-2
+ts <- -qt((1-.95)/2,lower.tail=TRUE,df=n-1)
+zs <- -qnorm((1-.95)/2,lower.tail=TRUE)
+data.frame(
+  t.multiplier = ts,
+  z.multiplier = zs
+)
+```
+
+Example 6.3.1:
+$$\bar{x} = 250.8$$
+$$s = 130.9$$
+$$n = 19$$
+
+This gives us an interval of:
+$$250.8 \pm 2.1009(\frac{130.9}{\sqrt{19}})$$
+
+In R we have:
+```{r}
+250.8 + c(-1,1)*qt(.975,df=18)*130.9/sqrt(19) # c(-1,1) gives the two end points of the C.I. by adding and then subtracting.
+
+```
+
+# Difference in two population means
+
+When working with two means we have a couple of new complications. First we need to decide if variances can be assumed equal. Assuming they're equal, we have $df=n_1+n_2-2$ and standard error a bit more complicated:
+$$s_p^2=\frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2}$$
+$$s_{\bar{x_1}-\bar{x_2}}=\sqrt{\frac{s_p^2}{n_1}+\frac{s_p^2}{n_2}}$$
+
+If not we have the following new standard error:
+$$s_{\bar{x_1}-\bar{x_2}}=\sqrt{ \frac{{\sigma_1}^2}{n_1} +          
+         \frac{{\sigma_2}^2}{n_2}
+         }$$
+
+Degrees of freedom is more complicated. We can use a conservative value of $min(n_1,n_2)-1$ when doing calculations by hand. If we use software, a more precise calculation is done giving fractional degrees of freedom that we can't use in tables anyway.
+
+## Exercise 6.4.10
+
+```{r}
+Nonsmokers <- c(10,8.4,12.8,25,11.8,9.8,12.5,15.4,23.5,9.4,25.1,19.5,25.5,9.8,7.5,11.8,12.2,15.0)
+Smokers <- c(30.0,30.1,15.0,24.1,30.5,17.8,16.8,14.8,13.4,28.5,17.5,14.4,12.5,20.4)
+cadmium.level <- c(Nonsmokers,Smokers)
+smoker <- c(rep('Nonsmoker',length(Nonsmokers)),
+            rep('Smoker',length(Smokers)))
+exr6.4.10 <- tibble(smoker,cadmium.level)
+exr6.4.10
+```
+
+Look at the data. We have everything we need to hand calculate our confidence intervals. Note that inferences require approximately normal differencs. The original data is somewhat non-normal so this might be questionable.
+```{r}
+gf_boxplot(cadmium.level~smoker,data=exr6.4.10)
+gf_histogram(~cadmium.level|smoker,data=exr6.4.10)
+gf_qq(~cadmium.level|smoker,data=exr6.4.10) %>%
+  gf_qqline()
+favstats(cadmium.level~smoker,data=exr6.4.10)
+```
+
+Letting R do more of the work for us.
+```{r}
+t.test(cadmium.level~smoker,data=exr6.4.10,var.equal=T)
+summary(lm(cadmium.level~smoker,data=exr6.4.10))
+```
+

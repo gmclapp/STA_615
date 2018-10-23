@@ -1,0 +1,175 @@
+---
+title: "Homework 2"
+author: "Glenn Clapp"
+due: "13 September, 2018"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE,error=FALSE}
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(readr)
+library(moments)
+```
+
+# Exercise 4.4.4: What is the probability that an individual selected at random used:
+# A. Five addictive substances?
+0.0501
+
+# B. Fewer than three addictive substances?
+0.6255 = 0.1853+0.4402
+
+# C. More than six addictive substances?
+0.0232 = 0.0077+0.0116+0.0026+0.0013
+
+# D. Between two and five adivctive substances, inclusive?
+0.7659 = 0.4402+0.1828+0.0927+0.0502
+```{r}
+substance_use_data = data.frame(
+  frequency = c(144,342,142,72,39,20,6,9,2,1)
+  )
+probability = substance_use_data$frequency/777
+substance_use_data <- cbind(substance_use_data,probability)
+#plot(substance_use_data$probability)
+substance_use_data
+```
+# Exercise 4.6.2: Given the standard normal distribution find the probability that a z picked at random will have a value between z = -2.87 and z = 2.64.
+
+```{r}
+pnorm(2.64) - pnorm(-2.87)
+```
+# Exercise 4.6.4: P(z>= -0.55)
+```{r}
+1.0 - pnorm(-0.55)
+```
+# Exercise 4.6.6: P(z<2.33)
+```{r}
+pnorm(2.33)
+```
+# Exercise 4.6.8: P(-2.58<=z<=2.58)
+```{r}
+pnorm(2.58) - pnorm(-2.58)
+```
+# Exercise 4.6.10: P(z=0.74)
+```{r}
+dnorm(0.74,0,1)
+```
+# Exercise 4.6.12: P(-2.67<=z<=z) = 0.9718
+```{r}
+qnorm(0.9718+pnorm(-2.67))
+```
+
+# Exercise 4.6.14: P(z<=z<=2.98) = 0.1117
+```{r}
+qnorm(pnorm(2.98)-0.1117)
+```
+# Exercise 4.7.2
+```{r}
+MEAN = 140
+SD = 50
+A = pnorm(200, lower.tail = F, mean=MEAN, sd=SD)
+B = pnorm(100, lower.tail = T, mean=MEAN, sd=SD)
+
+print(A)
+print(B)
+```
+# Exercise 4.7.6
+```{r}
+MEAN = 75
+SD = 25 #variance = 625
+
+#A = P(50<=x<=100)
+A = pnorm(100, lower.tail = T, mean=MEAN, sd=SD)-pnorm(50, lower.tail = T, mean=MEAN, sd=SD)
+
+#B = P(x>90)
+B = pnorm(90, lower.tail = F, mean=MEAN, sd=SD)
+
+#C = P(x<60)
+C = pnorm(60, lower.tail = T, mean=MEAN, sd=SD)
+
+#D = P(x>=85)
+D = pnorm(85, lower.tail = F, mean=MEAN, sd=SD)
+
+#E = P(30<=x<=110)
+E = pnorm(110, lower.tail = T, mean=MEAN, sd=SD)-pnorm(30, lower.tail = T, mean=MEAN, sd=SD)
+
+print(A)
+print(B)
+print(C)
+print(D)
+print(E)
+```
+# Review question 18 (Assume sd = 1.0)
+
+```{r}
+m = 2.0
+SD = 1
+#A = dnorm(3,m,sd) Why won't dnorm knit with non-numeric arguments? error on knitting.
+A = dnorm(3,2.0,1)
+B = pnorm(2,lower.tail = T, mean = m, sd = SD)
+C = pnorm(5,lower.tail = T, mean = m, sd = SD) - pnorm(3,lower.tail = T, mean = m, sd = SD)
+
+print(A)
+print(B)
+print(C)
+```
+# Review question 22 
+```{r}
+m = 10
+SD = 3
+A = pnorm(4,lower.tail = T, mean = m, sd = SD)
+B = pnorm(5,lower.tail = F, mean = m, sd = SD)
+C = pnorm(3,lower.tail = T, mean = m, sd = SD)
+  
+print(A)
+print(B)
+print(C)
+```
+# Review question 26
+```{r}
+P = 1-0.754
+P_onetail = P/2
+z = -1 * qnorm(P_onetail)
+print(paste("k = ", z))
+```
+# Review question 28
+```{r}
+P = 0.008
+SD = 10
+X=40 #P(x<=40)
+z = qnorm(P)
+# z = (x-u)/SD
+u = (z*SD - X)*-1
+print(u)
+```
+
+# Review question 30
+```{r}
+P = 0.0526
+SD = 5
+X=25 #P(x>=25)
+z = qnorm(P,lower.tail = F)
+# z = (x-u)/SD
+u = (z*SD - X)*-1
+print(u)
+```
+
+# Review question 32
+```{r}
+P = 0.9772
+u = 30
+X = 50 #P(x<=50)
+z = qnorm(P, lower.tail = T)
+#z = (x-u)/SD
+SD = (X-u)/z
+print(SD)
+```
+

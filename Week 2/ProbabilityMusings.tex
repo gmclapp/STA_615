@@ -1,0 +1,469 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Probability Work},
+            pdfauthor={D. Zeitler},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Probability Work}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{D. Zeitler}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{September 7, 2017}
+
+
+\begin{document}
+\maketitle
+
+We're just going to explore probabilities and random numbers with R and
+mosaic.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#library(tidyverse)}
+\KeywordTok{library}\NormalTok{(mosaic)}
+\CommentTok{#library(ggformula)}
+\end{Highlighting}
+\end{Shaded}
+
+R provides several probability distributions with associated functions.
+
+\begin{itemize}
+\tightlist
+\item
+  d: density or probability
+\item
+  q: quantile
+\item
+  p: cumulative probability
+\item
+  r: sample random values
+\end{itemize}
+
+Along with the extensive probability calculations provided in R, the
+mosaic package provides a couple of useful functions.
+
+\emph{xp: cumulative probability (right and left tail) with graphic
+}plot: plots pdf/pmf or cdf
+
+\section{First we will go through basic R probability, then mosaic
+stuff.}\label{first-we-will-go-through-basic-r-probability-then-mosaic-stuff.}
+
+Getting the probability for Z between -1.96 and 1.96 is easy:
+
+Subtracting the probability in the tails from one.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1}\OperatorTok{-}\KeywordTok{pnorm}\NormalTok{(}\OperatorTok{-}\FloatTok{1.96}\NormalTok{)}\OperatorTok{*}\DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.9500042
+\end{verbatim}
+
+Using the definition, subtract the cdf at the lower limit from the cdf
+at the upper limit.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pnorm}\NormalTok{(}\FloatTok{1.96}\NormalTok{) }\OperatorTok{-}\StringTok{ }\KeywordTok{pnorm}\NormalTok{(}\OperatorTok{-}\FloatTok{1.96}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.9500042
+\end{verbatim}
+
+\subsection{Reverse probabilities}\label{reverse-probabilities}
+
+We used 1.96, that's an approximate 95\% value. Get the z-value that
+gives us exactly 0.95, not just close.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qnorm}\NormalTok{(.}\DecValTok{025}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -1.959964
+\end{verbatim}
+
+Or if we don't want to think about removing that negative sign\ldots{}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qnorm}\NormalTok{(}\DecValTok{1}\OperatorTok{-}\NormalTok{.}\DecValTok{025}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.959964
+\end{verbatim}
+
+These are all using left tail probabilities. We can easily do right tail
+probabiliteis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pnorm}\NormalTok{(}\FloatTok{1.96}\NormalTok{,}\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.0249979
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qnorm}\NormalTok{(.}\DecValTok{025}\NormalTok{,}\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.959964
+\end{verbatim}
+
+Another neat trick is to put the value right into my text, say here:
+1.959964.
+
+\section{Maybe some graphics and
+summaries}\label{maybe-some-graphics-and-summaries}
+
+\begin{verbatim}
+##      speed           dist       
+##  Min.   : 4.0   Min.   :  2.00  
+##  1st Qu.:12.0   1st Qu.: 26.00  
+##  Median :15.0   Median : 36.00  
+##  Mean   :15.4   Mean   : 42.98  
+##  3rd Qu.:19.0   3rd Qu.: 56.00  
+##  Max.   :25.0   Max.   :120.00
+\end{verbatim}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\section{Look at speed}\label{look-at-speed}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{histogram}\NormalTok{(}\OperatorTok{~}\NormalTok{speed,}\DataTypeTok{data=}\NormalTok{cars)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{histogram}\NormalTok{(}\OperatorTok{~}\NormalTok{dist,}\DataTypeTok{data=}\NormalTok{cars)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+Although we can assess normality by looking at the histogram, a better
+way is to use a quantile plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{gf_qq}\NormalTok{(}\OperatorTok{~}\NormalTok{speed,}\DataTypeTok{data=}\NormalTok{cars) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{gf_qqline}\NormalTok{(}\OperatorTok{~}\NormalTok{speed,}\DataTypeTok{data=}\NormalTok{cars)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{gf_qq}\NormalTok{(}\OperatorTok{~}\NormalTok{dist,}\DataTypeTok{data=}\NormalTok{cars) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{gf_qqline}\NormalTok{(}\OperatorTok{~}\NormalTok{dist,}\DataTypeTok{data=}\NormalTok{cars)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\section{further probability stuff}\label{further-probability-stuff}
+
+Let's say we're making widgets. They're produced with a mean diameter 34
+and standard deviation of 3.
+
+What is the probability of getting widgets that are smaller than 24.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pnorm}\NormalTok{(}\DecValTok{24}\NormalTok{,}\DataTypeTok{lower.tail =}\NormalTok{ T,}\DataTypeTok{mean =} \DecValTok{34}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.0004290603
+\end{verbatim}
+
+\section{integrating}\label{integrating}
+
+Probability Z \textless{} 0.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{integrate}\NormalTok{(dnorm, }\OperatorTok{-}\OtherTok{Inf}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 0.5 with absolute error < 4.7e-05
+\end{verbatim}
+
+\section{mosaic functions}\label{mosaic-functions}
+
+\subsection{xpnorm}\label{xpnorm}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{xpnorm}\NormalTok{(}\FloatTok{1.96}\NormalTok{, }\DataTypeTok{mean=}\DecValTok{0}\NormalTok{, }\DataTypeTok{sd=}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+\end{verbatim}
+
+\begin{verbatim}
+## If X ~ N(0, 1), then
+\end{verbatim}
+
+\begin{verbatim}
+##  P(X <= 1.96) = P(Z <= 1.96) = 0.975
+\end{verbatim}
+
+\begin{verbatim}
+##  P(X >  1.96) = P(Z >  1.96) = 0.025
+\end{verbatim}
+
+\begin{verbatim}
+## 
+\end{verbatim}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+\begin{verbatim}
+## [1] 0.9750021
+\end{verbatim}
+
+\subsection{plotDist}\label{plotdist}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDist}\NormalTok{(}\StringTok{'norm'}\NormalTok{, }\DataTypeTok{mean=}\DecValTok{0}\NormalTok{, }\DataTypeTok{sd=}\DecValTok{1}\NormalTok{, }\DataTypeTok{kind=}\StringTok{'cdf'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'cdf'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDist}\NormalTok{(}\StringTok{'norm'}\NormalTok{, }\DataTypeTok{mean=}\DecValTok{0}\NormalTok{, }\DataTypeTok{sd=}\DecValTok{1}\NormalTok{, }\DataTypeTok{kind=}\StringTok{'qq'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'q-q'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-14-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDist}\NormalTok{(}\StringTok{'norm'}\NormalTok{, }\DataTypeTok{mean=}\DecValTok{0}\NormalTok{, }\DataTypeTok{sd=}\DecValTok{1}\NormalTok{, }\DataTypeTok{kind=}\StringTok{'density'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'density'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-14-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDist}\NormalTok{(}\StringTok{'norm'}\NormalTok{, }\DataTypeTok{mean=}\DecValTok{0}\NormalTok{, }\DataTypeTok{sd=}\DecValTok{1}\NormalTok{, }\DataTypeTok{kind=}\StringTok{'histogram'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'histogram'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-14-4.pdf}
+plotDist can be used for discrete too.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDist}\NormalTok{(}\StringTok{'binom'}\NormalTok{, }\DataTypeTok{size=}\DecValTok{25}\NormalTok{, }\DataTypeTok{prob=}\NormalTok{.}\DecValTok{25}\NormalTok{, }\DataTypeTok{kind=}\StringTok{'cdf'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'cdf'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-15-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDist}\NormalTok{(}\StringTok{'binom'}\NormalTok{, }\DataTypeTok{size=}\DecValTok{25}\NormalTok{, }\DataTypeTok{prob=}\NormalTok{.}\DecValTok{25}\NormalTok{, }\DataTypeTok{kind=}\StringTok{'qq'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'q-q'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-15-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDist}\NormalTok{(}\StringTok{'binom'}\NormalTok{, }\DataTypeTok{size=}\DecValTok{25}\NormalTok{, }\DataTypeTok{prob=}\NormalTok{.}\DecValTok{25}\NormalTok{, }\DataTypeTok{kind=}\StringTok{'density'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'density'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-15-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDist}\NormalTok{(}\StringTok{'binom'}\NormalTok{, }\DataTypeTok{size=}\DecValTok{25}\NormalTok{, }\DataTypeTok{prob=}\NormalTok{.}\DecValTok{25}\NormalTok{, }\DataTypeTok{kind=}\StringTok{'histogram'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'histogram'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-15-4.pdf}
+
+Overlaying things:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDist}\NormalTok{(}\StringTok{"binom"}\NormalTok{, }\DataTypeTok{size=}\DecValTok{100}\NormalTok{, }\DataTypeTok{prob=}\NormalTok{.}\DecValTok{3}\NormalTok{, }\DataTypeTok{col=}\StringTok{'black'}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{, }\DataTypeTok{pch=}\DecValTok{16}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDist}\NormalTok{(}\StringTok{"norm"}\NormalTok{, }\DataTypeTok{mean=}\DecValTok{30}\NormalTok{, }\DataTypeTok{sd=}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{100}\OperatorTok{*}\NormalTok{.}\DecValTok{3}\OperatorTok{*}\NormalTok{.}\DecValTok{7}\NormalTok{), }\DataTypeTok{groups=}\KeywordTok{abs}\NormalTok{(x}\OperatorTok{-}\DecValTok{30}\NormalTok{)}\OperatorTok{>}\DecValTok{6}\NormalTok{, }\DataTypeTok{type=}\StringTok{"h"}\NormalTok{, }\DataTypeTok{under=}\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProbabilityMusings_files/figure-latex/unnamed-chunk-16-2.pdf}
+
+Using fitdistr finds the distribution parameters based on a set of data.
+For example we generate 1000 standard normals and try fitting it to the
+normal distribution. The output is the estimated mean and standard
+deviation with their standard deviations.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{fitdistr}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{1000}\NormalTok{),}\DataTypeTok{densfun =} \StringTok{'normal'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       mean           sd     
+##   -0.01606216    0.97564721 
+##  ( 0.03085267) ( 0.02181613)
+\end{verbatim}
+
+
+\end{document}

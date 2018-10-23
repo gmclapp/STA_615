@@ -1,0 +1,162 @@
+---
+title: Iris Sepal Width ANOVA
+author: D. Zeitler
+date: Sys.Date()
+output: pdf_document
+---
+
+*First get a few setup things out of the way*
+```{r setup,echo=FALSE}
+library(tidyverse)
+library(mosaic)
+#library(RcmdrMisc)
+library(multcomp, pos=4)
+library(abind, pos=4)
+library(MASS, pos=4)
+data(iris, package="datasets")
+```
+Note that the order here may be important. There are functions that get modified by multiple packages. The result seems ok, but might cause some problems.
+
+# Parametric one-way testing
+
+We're going to use the built-in Iris data set to show and example of an analysis of variance.
+
+Start by looking at box plots. We're looking for similar box sizes and symmetry in each of the groups. We'd like normality if  possible. 
+
+```{r}
+tally(~Species,data=iris)
+bwplot(Sepal.Width~Species, data=iris)
+gf_qq(~Sepal.Width|Species, data=iris) %>%
+gf_qqline(~Sepal.Width|Species, data=iris)
+favstats(Sepal.Width~Species, data=iris)
+```
+
+```{r}
+histogram(~Petal.Length|Species,data=iris)
+qqmath(~Petal.Length|Species,data=iris)
+```
+
+We could do three t-tests for all pairs of species.
+
+```{r}
+iris %>%
+  filter(Species!='virginica') %>%
+  t.test(Sepal.Width~Species,var.equal=F,data=.)
+
+iris %>%
+  filter(Species!='versicolor') %>%
+  t.test(Sepal.Width~Species,var.equal=F,data=.)
+
+iris %>%
+  filter(Species!='setosa') %>%
+  t.test(Sepal.Width~Species,var.equal=F,data=.)
+
+```
+
+But what's wrong with this? Since each test has an alpha of 0.05, we have a potential overall alpha of 0.15. That's a 15% chance of Type I error. To control this we'll use an overall test. But don't throw out the pairwise t-tests, they'll be use as post-hoc tests if the overall test is significant.
+
+First we need to run a Levene's test for equality of variances. 
+
+Look at the standard deviations of Sepal.Width for each of the three species.
+```{r}
+sd(Sepal.Width~Species, data=iris)
+```
+then examine the levene's test for eaual variances
+```{r}
+library(RcmdrMisc)
+with(iris, leveneTest(Sepal.Width, Species, center=mean))
+```
+
+This test has equal variances as the null hypothesis, so we would prefer not to reject the null hypothesis. The p-value of 0.5498 fails to reject $H_0$, so we can go ahead and run the ANOVA including the pairwise comparisons. The pairwise comparisons are simply the t-tests we did above, but run in this context the output is cleaner and we have a couple of extra features.
+
+Note also the use of the aov function. It's almost the same as lm, but has some good features when we're fitting the ANOVA model.
+```{r}
+AnovaModel.1 <- aov(Sepal.Width ~ Species, data=iris)
+summary(AnovaModel.1)
+
+
+#Alternatively:
+AnovaModel.1 <- lm(Sepal.Width ~ Species, data=iris)
+anova(AnovaModel.1)
+```
+
+The ANOVA table shows a strong rejection of $H_0: \mu_1=\mu_2=\mu_3$, so we look at the pairwise tests (called a Post Hoc analysis) for significant differences. We use the general linear hypotheses function.
+
+```{r}
+favstats(Sepal.Width~Species,data=iris)
+```
+
+Now do a post-hoc analysis.
+```{r}
+.Pairs <- glht(AnovaModel.1, linfct = mcp(Species = "Tukey"))
+cat('pairwise tests:\n')
+summary(.Pairs)
+```
+
+```{r}
+cat('confidence intervals:\n')
+confint(.Pairs)
+```
+
+```{r}
+cat('compact letter display:\n')
+cld(.Pairs)
+```
+
+```{r}
+old.oma <- par(oma=c(0,5,0,0))
+plot(confint(.Pairs))
+par(old.oma)
+remove(.Pairs)
+```
+
+
+```{r}
+with(iris,pairwise.t.test(Petal.Width,Species,p.adjust.method = "bonf"))
+```
+
+
+# The non-parametric one-way test
+
+If we have good reason to suspect non-normality, we can run the equivalent non-parametric test. It's the Kruskal-Wallis test under the Nonparametrics item of Statistics. Note that medians for the groups are automatically compared. If the groups have similar shapes (from the box plots) this is a test for difference in medians.
+
+```{r}
+favstats(Sepal.Width~Species, data=iris)
+kruskal.test(Sepal.Width ~ Species, data=iris)
+```
+
+Now, since we reject $H_0$, run wilcox rank sum tests on pairs of levels to determine which pairs of levels are statistically different. 
+
+Done individually
+```{r}
+iris %>%
+  filter(Species!='virginica') %>%
+  wilcox.test(Sepal.Width~Species,var.equal=F,data=.)
+
+iris %>%
+  filter(Species!='versicolor') %>%
+  wilcox.test(Sepal.Width~Species,var.equal=F,data=.)
+
+iris %>%
+  filter(Species!='setosa') %>%
+  wilcox.test(Sepal.Width~Species,var.equal=F,data=.)
+```
+
+or using pairwise
+```{r}
+with(iris,
+     pairwise.wilcox.test(Sepal.Width,
+                          Species,
+                          p.adjust.method='none')
+     )
+```
+
+and using a bonferroni correction
+```{r}
+with(iris,
+     pairwise.wilcox.test(Sepal.Width,
+                          Species,
+                          p.adjust.method='bonferroni'))
+```
+
+And as we saw with the parametric testing, we have strong significance for all three pairs with versicolor and virginica the 'closest' to each other.

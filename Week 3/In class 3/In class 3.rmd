@@ -1,0 +1,21 @@
+---
+title: "In class 3"
+author: "Glenn Clapp"
+due: "13 September, 2018"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE,error=FALSE}
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(readr)
+library(moments)
+```

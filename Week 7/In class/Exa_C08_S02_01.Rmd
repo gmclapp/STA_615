@@ -1,0 +1,75 @@
+---
+ title: Example 8.2.1 Daniel/Cross
+ author: D. Zeitler
+ date: October 15, 2015
+ output: pdf_document
+---
+
+```{r}
+#' Setup the libraries we'll need - install them if needed
+library(RcmdrMisc)
+library(multcomp)
+library(abind)
+library(MASS)
+library(mosaic)
+library(tidyr)
+```
+
+
+First let's read in the data and take a quick look at it.
+```{r}
+game.meats <- read.csv('EXA_C08_S02_01.csv')
+head(game.meats)
+stripchart(game.meats,method = "stack",pch=19,xlab='Selenium content(ug/100g of dry weight)',ylab='Meat type')
+boxplot(game.meats,horizontal = T)
+```
+
+This data is not in our usual structure, let's restructure it.
+```{r}
+game <- game.meats %>% 
+  gather(Game,Selenium,VEN:NRB) %>% 
+  filter(!is.na(Selenium)) %>% 
+  mutate(Game=factor(Game))
+head(game)
+stripchart(Selenium~Game,game,method='stack',pch=19,xlab='Selenium content(ug/100g of dry weight)',ylab='Meat type')
+bwplot(Selenium~Game,data=game)
+```
+
+Now run a levene's test.
+```{r}
+favstats(Selenium~Game, data=game)
+leveneTest(Selenium~Game,data=game,center=mean)
+```
+
+The test rejected $H_0$, so we really shouldn't use ANOVA, but it's relatively robust so go ahead.
+```{r}
+gameAnova <- aov(Selenium~Game,data=game)
+summary(gameAnova)
+```
+
+Look at the pairwise confidence intervals.
+```{r}
+numSummary(game$Selenium , groups=game$Game, 
+           statistics=c("mean", "sd"))
+.Pairs <- glht(gameAnova, linfct = mcp(Game = "Tukey"))
+summary(.Pairs) # pairwise tests
+confint(.Pairs) # confidence intervals
+cld(.Pairs) # compact letter display
+old.oma <- par(oma=c(0,5,0,0))
+plot(confint(.Pairs))
+par(old.oma)
+remove(.Pairs)
+```
+
+Now let's do it with non-parametrics
+```{r} 
+tapply(game$Selenium, game$Game, median, na.rm=TRUE)
+tapply(game$Selenium, game$Game, IQR, na.rm=TRUE)
+kruskal.test(Selenium ~ Game, data=game)
+```
+
+pairwise
+```{r}
+with(game,pairwise.wilcox.test(Selenium,Game,p.adjust.method='none'))
+with(game,pairwise.wilcox.test(Selenium,Game,p.adjust.method='bonferroni'))
+```

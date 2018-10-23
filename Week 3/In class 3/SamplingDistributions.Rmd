@@ -1,0 +1,84 @@
+---
+title: "Sampling Distributions for mean"
+author: "D. Zeitler"
+date: "September 14, 2017"
+output: pdf_document
+---
+
+```{r setup,message=FALSE,warning=FALSE}
+library(mosaic)
+library(ggformula)
+```
+
+# Take samples manually first.
+For each, look at the rectangles page and write down the size of each of the rectangles for n=5 and n=25.
+Take the mean and standard deviation of each and add it to the google worksheet. Use R to do your calculations.
+```{r}
+cat('Sample 5 rectangles:\n')
+sample(1:100,5,replace = T)
+cat('Sample 25 rectangles:\n')
+sample(1:100,25,replace = T)
+```
+```{r}
+s11 <- c(1,18,24,7)
+favstats(s11)
+```
+
+Once the data file has been saved, download it to read in here.
+```{r}
+RectangleStats <- read.csv('RectangleStats.csv')
+RectangleStats
+```
+
+Now let's do some calculations. Theoretically the mean of this distribution is 6.26 and the standard deviation is 5.69.
+```{r}
+5.69/sqrt(5)
+5.69/sqrt(25)
+```
+
+```{r}
+RectangleStats %>% summary()
+```
+```{r}
+gf_qq(~Mean5,data=RectangleStats)
+gf_qq(~Mean25,data=RectangleStats)
+```
+
+
+We have the population, so let's see what the mean ($\mu$) and standard deviation ($\sigma$) are.
+
+```{r}
+Rectangles <- read.csv('Rectangles.csv')
+histogram(~Area,data=Rectangles,breaks = 25)
+```
+
+We can now calculate the mean and standard deviation from the population.
+
+* The mean is $\mu$ = `r mean(~Area,data=Rectangles)`.
+* And the standard deviation is $\sigma$ = `r sd(~Area,data=Rectangles)`
+
+```{r}
+favstats(~Area,data=Rectangles)
+```
+
+# Sampling distribution
+
+So now how does the sampling distribution of the mean look? We'll simulate many samples and see.
+```{r}
+#sim.1 takes 1000 samples of size 5.If the size were 1, the sample mean distribution would look very much
+#like the parent distribution.
+
+sim.1 <- do(1000) * {Rectangles %>% sample_n(5,replace = T) %>% favstats(~Area,data=.)}
+histogram(~mean,data=sim.1,breaks = 25)
+densityplot(~mean,data=sim.1)
+histogram(~sd,data=sim.1)
+densityplot(~sd,data=sim.1)
+```
+
+```{r}
+sim.1 <- do(100) * {Rectangles %>% sample_n(25) %>% favstats(~Area,data=.)}
+histogram(~mean,data=sim.1)
+densityplot(~mean,data=sim.1)
+histogram(~sd,data=sim.1)
+densityplot(~sd,data=sim.1)
+```

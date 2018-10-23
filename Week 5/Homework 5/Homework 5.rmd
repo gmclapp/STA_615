@@ -1,0 +1,117 @@
+---
+title: "Homework #5"
+author: "Glenn Clapp"
+due: "04 October, 2018"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE,error=FALSE}
+library(mosaic)
+library(reticulate) # Allows python and R to share namespace
+knitr::knit_engines$set(Python = reticulate::eng_python) # Tells the knit function about the python engine
+```
+
+7.2.2 (3pts)
+
+```{r}
+subjects = data.frame(
+  age = c(62,62,68,48,51,60,51,57,57,41,62,50,53,34,62,61)
+)
+
+t.test(subjects$age,var.equal=T,mu=60)
+favstats(subjects$age)
+
+33.```
+Yes, a 95% confidence interval estimates the true mean to be between 50.21 and 59.67. The entirety of that interval is less than 60.
+
+7.2.4 (3pts)
+```{r}
+n_visits=25
+xbar_visits = 4.8
+s_visits = 2
+
+ts <- -qt((1-.95)/2,lower.tail=TRUE,df=n_visits-1)
+standard_error = s_visits/n_visits^0.5
+print(ts)
+#pt(ts,df=n_visits-1)
+lower.ci=xbar_visits-ts*standard_error
+upper.ci=xbar_visits+ts*standard_error
+
+print(lower.ci)
+print(upper.ci)
+```
+
+Can it be concluded from these data that the population mean is greater than four visits per patient? NO.
+
+What assumptions are necessary? Random sample selection and normally distributed population.
+
+7.3.2 (3pts)
+```{r}
+n_fract = 31
+n_healthy = 31
+
+xbar_fract = 76.9
+s_fract = 12.6
+
+xbar_healthy = 90.9
+s_healthy = 12.5
+
+xbar_paired = xbar_healthy - xbar_fract
+s_paired = ((s_fract^2+s_healthy^2)/n_fract)^0.5 #Same sample size simplification
+
+standard_error = s_paired/n_fract^0.5
+ts <- -qt((1-.95)/2,lower.tail=TRUE,df=n_fract-1)
+print(ts)
+lower.ci=xbar_paired-ts*standard_error
+upper.ci=xbar_paired+ts*standard_error
+
+print(lower.ci)
+print(upper.ci)
+
+```
+
+Is the healthy group higher? Yes. The 95% confidence interval in a paired t-test is entirely positive.
+
+7.3.4 (3pts)
+```{r}
+ hypertension <- read.csv('EXR_C07_S03_04.csv')
+
+t.test(Length~Group,data=hypertension,var.equal=T)
+```
+
+Can we conclude that patients with primary hypertension on average havehigher cholesterol levels than normotensive patients?
+Yes. The true difference in peans is not equal to 0 p = 0.0001125
+
+
+
+7.3.12 (3pts)
+
+
+Can we conclude that, on the average, lymphocyctes and tumor cells differ in size? Yes.
+```{r}
+ tumors <- read.csv('EXR_C07_S03_12.csv')
+
+t.test(Size~Group,data=tumors,var.equal=T)
+```
+7.4.2 (3pts)
+```{r}
+wellbeing <- read.csv('EXR_C07_S04_02.csv')
+
+t.test(wellbeing$Base-wellbeing$Follow,data=tumors,var.equal=T)
+```
+
+Is there sufficient evidence to indicate that quality of physical well-being significantly decreases in the first week of discharge among patients who receive a phone call? No.3
+
+7.9.2 (3pts)
+
+7.10.2 (3pts)
+
+13.4.2 (3pts)
+13.6.2 (3pts)

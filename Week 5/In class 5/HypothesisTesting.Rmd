@@ -1,0 +1,161 @@
+---
+title: "Hypothesis test, sample size and power"
+author: "D. Zeitler"
+date: September 27, 2018"
+output: pdf_document
+---
+
+```{r}
+library(tidyverse)
+library(mosaic)
+```
+
+
+# Two sample inference - Male/Female Health Data
+```{r}
+mfh <- read_csv('MFHealthSubset.csv')
+gf_boxplot(sys~gender,data=mfh)
+gf_qq(~sys|gender,data=mfh) %>%
+  gf_qqline(~sys|gender,data=mfh)
+
+var.test(sys~gender,data=mfh) #This if the F-test to test for equal variances
+t.test(sys~gender,data=mfh,var.equal=TRUE) #Because there was insufficient evidence to indicate unequal variances, we may test as though they were equal.
+wilcox.test(sys~gender,data=mfh,correct=F)
+```
+
+# Paired tests - Delaware Crabs Data
+Note that wilcox.test is not part of the mosaic package and so does not do the full formulas of t.test.
+```{r}
+dc <- read_csv('DelawareCrabs.csv')
+t.test(~(`2012`-`2011`),data=dc)
+t.test(dc$`2011`,dc$`2012`,paired=T)#This does the same thing as the previous test.
+t.test(dc$`2011`,dc$`2012`)#This erroneously uses an ordinary t-test rather than a paired test.
+dx <- dc$`2011` - dc$`2012`
+gf_qq(~dx) %>% gf_qqline()
+t.test(dx)
+wilcox.test(dx)
+```
+
+## Sign test with R
+
+A sign test is used to decide whether a binomial distribution has the equal chance of success and failure.
+
+*Example*
+A soft drink company has invented a new drink, and would like to find out if it will be as popular as the existing favorite drink. For this purpose, its research department arranges 18 participants for taste testing. Each participant tries both drinks in random order before giving his or her opinion.
+
+*Problem*
+It turns out that 5 of the participants like the new drink better, and the rest prefer the old one. At .05 significance level, can we reject the notion that the two drinks are equally popular?
+
+*Solution*
+The null hypothesis is that the drinks are equally popular. Here we apply the binom.test function. As the p-value turns out to be 0.096525, and is greater than the .05 significance level, we do not reject the null hypothesis.
+
+```{r}
+binom.test(5, 18) 
+``` 
+
+*Answer*
+At .05 significance level, we do not reject the notion that the two drinks are equally popular.
+
+-----------------------------------------------------------
+# Power and Sample Size
+
+In this section, we will explore how R can be used to undertake power calculations using analytic approaches. We consider a simple problem with two tests (t-test and sign test) of a one-sided comparison.
+
+We will compare the power of the sign test and the power of the test based on normal theory (one sample one sided t-test) assuming that $\sigma$ is known.
+
+Let $X_1, ..., X_{25}$ be i.i.d. $N(0.3, 1)$ (this is the alternate that we wish to calculate power for).  Consider testing the null hypothesis $H_0: \mu=0$ versus $H_A: \mu>0$ at significance level $\alpha=.05$.  
+
+## Sign test
+
+We start by calculating the Type I error rate for the sign test.  Here we want to reject when the number of positive values is large. Under the null hypothesis, this is distributed as a Binomial random variable with n=25 trials and p=0.5 probability of being a positive value.  Let's consider values between 15 and 19.
+
+```{r}
+xvals <- 15:19
+probs <- 1 - pbinom(xvals, size=25, prob=0.5)
+cbind(xvals, probs)
+qbinom(.95, size=25, prob=0.5)
+```
+
+So we see that if we decide to reject when the number of positive values is 17 or larger, we will have an $\alpha$ level of {r round(1-pbinom(16, 25, 0.5), 3)}, which is near the nominal value in the problem.
+
+We calculate the power of the sign test as follows. The probability that $X_i > 0$, given that $H_A$ is true is given by:
+
+1 - pnorm(0, mean=0.3, sd=1)
+
+We can view this graphically using the command:
+```{r}
+xpnorm(0, mean=0.3, sd=1, lower.tail=FALSE)
+```
+
+The power under the alternative is equal to the probability of getting 17 or more positive values, given that $p=0.6179$:
+```{r}
+1 - pbinom(16, size=25, prob=0.6179)
+```
+
+The power is modest at best.
+
+## t-test
+
+We next calculate the power of the test based on normal theory.  To keep the comparison fair, we will set our $\alpha$ level equal to 0.05388.
+
+```{r}
+(alpha <- 1-pbinom(16, size=25, prob=0.5))
+```
+
+First we find the rejection region.  
+```{r}
+n <- 25; 
+sigma <- 1 # given
+stderr <- sigma/sqrt(n)
+zstar <- qnorm(1-alpha, mean=0, sd=1)
+zstar
+crit <- zstar*stderr
+crit
+```
+
+Therefore, we reject for observed means greater than {r round(crit,3)}.  
+
+To calculate the power of this one-sided test we find the
+probability under the alternative hypothesis to the right of this
+cutoff.
+```{r}
+power <- 1 - pnorm(crit, mean=0.3, sd=stderr)
+power
+```
+
+The power of the test based on normal theory is {r round(power,3)}. To provide a check (or for future calculations of this sort) we can use the 
+
+power.t.test() function.
+
+```{r}
+alpha <- 0.05
+power.t.test(n=c(26:30), delta=.3, sd=1, 
+             sig.level=alpha, alternative="one.sided",
+             type="one.sample")
+```
+
+
+If we just want the power by itself.
+```{r}
+power.t.test(n=(2:100), delta=.3, sd=1, 
+             sig.level=alpha, alternative="one.sided",
+             type="one.sample")$power -> P
+gf_point(P~(2:100))  
+```
+```{r}
+power.t.test(n=25, delta=seq(0,1,.01), sd=1, 
+             sig.level=alpha, alternative="one.sided",
+             type="one.sample")$power -> P
+gf_point(P~seq(0,1,.01))  
+```
+
+
+Note the '$power' at the end of the previous command. We are pulling the power item from the list returned by the function
+
+power.t.test()
+
+This analytic (formula-based approach) yields a similar 
+estimate to the value that we calculated directly.
+
+Overall, we see that the t-test has higher power than the sign test, if the underlying data are truly normal.  
+

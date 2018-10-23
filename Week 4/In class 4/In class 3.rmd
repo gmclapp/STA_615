@@ -1,0 +1,28 @@
+---
+title: "In class 4"
+author: "Glenn Clapp"
+date: "21 September, 2018"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE,error=FALSE}
+library(mosaic)
+library(reticulate) # Allows python and R to share namespace
+knitr::knit_engines$set(Python = reticulate::eng_python) # Tells the knit function about the python engine
+```
+
+```{r ex6.2.4}
+ex6.2.4 <- read.csv('EXA_c06_s02_04.csv')
+```
+
+```{r}
+myhist <- function(formula,data,xl='x-variable'){
+  gf_fitdistr(formula,data=data)
+}

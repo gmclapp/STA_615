@@ -1,0 +1,149 @@
+---
+title: "Homework #6"
+author: "Glenn Clapp"
+due: "18 October, 2018"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE,error=FALSE}
+library(mosaic)
+library(reticulate) # Allows python and R to share namespace
+library(RcmdrMisc)
+library(multcomp, pos=4)
+library(abind, pos=4)
+library(MASS, pos=4)
+knitr::knit_engines$set(Python = reticulate::eng_python) # Tells the knit function about the python engine
+```
+
+8.2.2
+Patients suffering from rheumatic diseases or osteoporosis often suffer critical losses in bone mineral density (BMD). Alendronate is one medication prescribed to build or prevent further loss of BMD. Holcomb and Rothenber looked at 96 women taking alendronate to determine if a difference existed in the mean percent change in BMD among five different primary diagnosis classifications. Group 1 patients were diagnosed with rheumatoid arthritis (RA). Group 2 patients were a mixed collection of patients with diseases including lupus, Wegener's granulomatosis and polyarteritis, and other vasculitic diseases (LUPUS). Group 3 patients had polymyalgia rheumatica or temporal arthritis (PMRTA). Group 4 patients had osteoarthritis (OA) and group 5 patients had osteoporosis (O) with no other rheumatic diseases identified in the medical record. Changes in BMD are shown in the following table.
+
+Go through the ten steps of analysis of variance hypothesis testing to see if you can conclude that there is a difference among population means. Let $\alpha$ = 0.05 for each test. Use Tukey's HSD procedure to test for significant differences among individual pairs of means (if appropriate). Use the same $\alpha$ value for the F test. Construct a dot plot and sid-by-side boxplots of the data.
+
+1. Description of data
+2. Assumptions: The four sets of data constitute independent simple random samples from the four indicated populations. We assume that the four populations of measurements are normally distributed with equal variances.
+3. Hypotheses: $H_0: \mu_1=\mu_2=\mu_3=\mu_4$, $H_A: !H_0$.
+4. Test statistic
+5. Distribution of test statistic
+6. Decision rule
+7.Calculation of test statistic
+8. Statistical decision
+9.Conclusion
+10. p-value
+
+
+
+```{r}
+BMD <- read.csv('BMD_data.csv')
+BMD_stacked <- read.csv('BMD_data - stacked.csv')
+boxplot(BMD)
+gf_qq(~BMD|Disorder, data=BMD_stacked)
+
+```
+
+then examine the levene's test for equal variances
+```{r}
+with(BMD_stacked, leveneTest(BMD, Disorder, center=mean))
+```
+
+
+
+Because of this failure of the Levene test, we have sufficient evidence to reject the null hypothesis (of that test) that the variances of the samples are equal. However, as an exercise, we move forward with the ANOVA.
+
+```{r}
+AnovaModel.1 <- lm(BMD ~ Disorder, data=BMD_stacked)
+anova(AnovaModel.1)
+```
+
+There is insufficient evidence to reject the null hypothesis. So, we conclude that the mean bone mineral density change for each sample is equal.
+
+8.2.4
+Gold et al. investigated the effectiveness on smoking cessation of a nicotine patch, bupropion SR, or both, when co-administerd with cognitive-behavioral therapy. Consecutive consenting patients (n=164) assigned themselves to one of three treatments according to personal preference: nicotine patch (NTP, n=13), bupropion SR (B; n = 92), and bupropion SR plus nicotine patch (BNTP,n = 59). At their first smoking cessation class, patients estimated the number of packs of cigarettees they currently smoked per day and the numbers of years they smoked. The "pack years" is the average number of packs the subject smoked per day multiplied by the number of years the subject had smoked. The results are shown in the following table.
+
+```{r}
+PY <- read.csv('Pack_Years.csv')
+PY_stacked <- read.csv('Pack_Years - Stacked.csv')
+boxplot(PY)
+gf_qq(~Pack_Years|Cessation_technique, data=PY_stacked)
+
+```
+
+then examine the levene's test for equal variances
+```{r}
+with(PY_stacked, leveneTest(Pack_Years, Cessation_technique, center=mean))
+```
+
+There is not sufficient evidence to reject the null hypothesis, so the variances of the samples is considered equal.
+
+```{r}
+AnovaModel.2 <- lm(Pack_Years ~ Cessation_technique, data=PY_stacked)
+anova(AnovaModel.2)
+```
+
+There is sufficient evidence to reject the null hypothesis in this case. We conclude that at least one of the sample means is not equal to the others.
+
+Now do a post-hoc analysis.
+```{r}
+.Pairs <- glht(AnovaModel.2, linfct = mcp(Cessation_technique = "Tukey"))
+cat('pairwise tests:\n')
+summary(.Pairs)
+```
+
+Based on these post-hoc tests, we conclude that they nicotine patch participants accumulated a different average number of pack years than either of the other cessation techniques.
+
+For the following exercises, perform the Kruskal-Wallis test at the indicated level of significance and determine the p value:
+
+13.8.2
+The following are outpatient charges (-$100) made to patients for a certain surgical procedure by samples of hospitals located in three different areas of the country:
+1. Data
+2. Assumptions: The samples are independent random samples from their respective populations. The measureemnt scale employed is at least ordinal. The distributions of the values in the sampled populations are identical except for the possibility that one or more of the populations are composed of values that tend to be larger than those of the other populations.
+3. Hypotheses: $H_0: \mu_1=\mu_2=\mu_3$, $H_A: !H_0$.Let $\alpha$ = 0.01
+4. Test statistic: H = (12/n(n+1))*sum((R^2/n)-3(n+1))
+5. Distribution of test statistic. Critical values of H for various sample sizes and $\alpha$ levelsare given in Appendix Table N.
+6. Decision rule: The null hypothesis will be rejected if the computed value of H is so large that the probability of obtaining a value that large or larger when H_0 is true is equal to or less than the chosen significance level, $\alpha$.
+7. Calculation of test statistic: When the three samples are combined into a single series and ranked, the table of ranks shown in Table 13.8.2 may be constructed. The null hypothesis implies that the observations in the three samples constitute a single sample size 15 from a single population. If this is true, we could expect the ranks to be well distributed among the three groups. Consequently, we would expect the total sum of ranks to be divided among the three groups in proportion to group size.
+8. Statistical decision
+9. Conclusion
+10. p-value
+
+```{r}
+OUT <- read.csv('Outpatient_charges.csv')
+OUT_stacked <- read.csv('Outpatient_charges - stacked.csv')
+boxplot(OUT)
+gf_qq(~Charge|Area, data=OUT_stacked)
+
+```
+
+```{r}
+favstats(Charge~Area, data=OUT_stacked)
+kruskal.test(Charge ~ Area, data=OUT_stacked)
+```
+
+There is sufficient evidence to reject the null hypothesis in this case that the means are equal.
+
+##Post HOC tests## non-parametric non-paired.
+
+13.8.4
+Refer to Example 13.8.1. Another variable of interest to Lacroix et al. was the number of alveolar cells in three groups of subjects exposed to air, benzaldeghyde, or acetaldehyde. The following table gives the information for six guinea pigs in each of the three treatment groups.
+
+```{r}
+CELL <- read.csv('Alveolar_cells.csv')
+CELL_stacked <- read.csv('Alveolar_cells - stacked.csv')
+boxplot(CELL)
+gf_qq(~Cells|Gas, data=CELL_stacked)
+
+```
+
+```{r}
+favstats(Cells~Gas, data=CELL_stacked)
+kruskal.test(Cells ~ Gas, data=CELL_stacked)
+```
+
+Fail to reject the null.

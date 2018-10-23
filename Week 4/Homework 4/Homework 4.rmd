@@ -1,0 +1,342 @@
+---
+title: "Homework #4"
+author: "Glenn Clapp"
+due: "27 September, 2018"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE,error=FALSE}
+library(mosaic)
+library(reticulate) # Allows python and R to share namespace
+knitr::knit_engines$set(Python = reticulate::eng_python) # Tells the knit function about the python engine
+```
+
+6.2.2 (Using population standard deviation)(3 pts)
+
+We wish to estimate the mean serum indirect bilirubin level of 4-day-old infants. The mean for a sample of 16 infants was found to be 5.98 mg/100cc. Assume that bilirubin levels in 4-day-old infants are approximately normally distributed with a standard deviation of 3.5 mg/100cc
+
+```{r}
+n_infants = 16
+xbar_infants = 5.98
+sd_infants = 3.5 # population standard deviation.
+
+sd_xbar = (sd_infants^2/n_infants)^0.5 # standard deviation of sample means
+
+u_infants = xbar_infants + c(-1,1)*sd_xbar
+print(u_infants) # Lower and upper limits of approximate 95% confidence interval
+
+```
+
+6.3.2 (7 pts)
+
+In a study of the effects of early Alzheimer's disease on nondeclarative memory, Reber et al. used the Category Fluency Test to establish baseline persistnece and semantic memory and language abilities. The eight subjects in the sample had Category Fluency Test scores of 11, 10, 6, 3, 11, 10, 9, 11. Assume that the eight subjects constitute a simple random sample from a normally distributed population of similar subjects with early Alzheimer's disease.
+
+```{r}
+CFT = data.frame(
+  scores = c(11,10,6,3,11,10,9,11)
+)
+n = 8
+# normally distributed population
+
+```
+(a) What is the point estimate of the population mean?
+```{r}
+u_estimate = mean(CFT$scores)
+print(u_estimate)
+```
+
+(b) What is the standard deviation of the sample?
+
+```{r}
+s = sd(CFT$scores)
+print(s)
+```
+
+(c) What is the estimated standard error of the sample mean
+
+```{r}
+standard_error = s/n^0.5
+print(standard_error)
+```
+
+(d) Construct a 95 percent confidence interval for the population mean category fluency test score.
+
+```{r}
+ts <- -qt((1-.95)/2,df=n-1,lower.tail=TRUE)
+lower.ci=u_estimate-ts*standard_error
+upper.ci=u_estimate+ts*standard_error
+
+print(lower.ci)
+print(upper.ci)
+```
+
+(e) What is the precision of the estimate?
+```{r}
+precision = upper.ci - lower.ci
+print(precision)
+```
+
+(f) State the probabilistic interpretation of the confidence interval you constructed.
+
+We can be 95% certain that the true population mean is somewhere between 6.450 and 11.300
+
+(g) State the practical interpretation of the confidence interval you constructed.
+
+In repeated sampling, 95% of of the intervals constructed in this way will straddle the mean.
+
+6.3.4 (4pts)
+
+The concern of a study by Beynnon et al. were nine subjects with chronic anterior cruciate ligament (ACL) tears. One of the variables of interest waws the laxity of the anteroposterior, where higher values indicate more knee instability. The researchers found that among subjects with ACL-deficient knees, the mean laxity value was 17.4mm with a standard deviation of 4.3mm.
+
+(a) What is the estimated standard error of the mean?
+
+```{r}
+x_bar_ACL = 17.4
+s_ACL = 4.3
+n_ACL = 9
+
+standard_error = s_ACL/n^0.5
+print(standard_error)
+```
+
+(b) Construct the 99 percent confidence intreval for the mean of the population from which the nine subjects may be presumed to be a random sample.
+```{r}
+ts <- -qt((1-.99)/2,df=n-1,lower.tail=TRUE)
+lower.ci=u_estimate-ts*standard_error
+upper.ci=u_estimate+ts*standard_error
+
+print(lower.ci)
+print(upper.ci)
+```
+(c) What is the precision of the estimate
+```{r}
+precision = upper.ci - lower.ci
+print(precision)
+```
+(d) What assumptions are necessary for the validity of the confidence interval you constructed?
+
+The samples must be drawn from a random, approximately normal population distribution.
+
+6.3.6 (3pts)
+
+The subjects of a study by Dugoff et al. were 10 obstetrics and gynecology interns at the University of Colorado Health Sciences Center. The researchers wanted to assess competence in performing clinical breast examinations. One of the baseline measurements was the number of such examinations performed. The following data give the number of breast examinations performed for this sample of 10 interns.
+
+Construct a 95 percent confidence interval for the mean of the population from which the study subjects may be presumed to have been drawn.
+
+```{r}
+breast_exams = data.frame(
+  Intern_number = c(1,2,3,4,5,6,7,8,9,10),
+  No_exams = c(30,40,8,20,26,35,35,20,25,20)
+)
+n_breast = 10
+ci_breast = 0.95
+
+mean_breast = mean(breast_exams$No_exams)
+sd_breast = sd(breast_exams$No_exams)
+
+stderr_breast = sd_breast/n_breast^0.5
+
+ts <- -qt((1-ci_breast)/2,df=n-1,lower.tail=T)
+lower_breast = mean_breast-ts*stderr_breast
+upper_breast = mean_breast+ts*stderr_breast
+print(lower_breast)
+print(upper_breast)
+
+
+```
+
+6.4.2 (3pts)
+
+Chan et al. developed a questionnaire to assess knowledge of prostate cancer. There was a total of 36 questions to which respondents could answer "agree," "disagree," or "don't know." Scores could range from 0 to 36. The mean scores for Caucasian study participants was 20.6 with a standard deviation of 5.8, while the mean scores for African-American men was 17.4 with a standard deviation of 5.8. The number of Caucasian study participants was 185, and the number of African-Americans was 86.
+
+Construcct the 90, 95, and 99 percent confidence intervals for the difference between population means. Where appropriate, state the assumptions that make your method valid. State the practical and probabilisitc interpretations of each interval that you construct. Consider the variables under consideration in each exercise, and state what use you think reseaerchers migh make of your results.
+
+```{r}
+uCaucasian = 20.6
+sdCaucasian = 5.8
+nCaucasian = 185
+
+uAfrican = 17.4
+sdAfrican = 5.8
+nAfrican = 86
+
+s_pooled = ((nCaucasian-1)*sdCaucasian^2+(nAfrican-1)*sdAfrican^2)/(nCaucasian+nAfrican-2)
+# This calculates a pooled variance estimate. We can do this because the variances of the two samples are equal.
+
+stderr_prostate = (s_pooled/nCaucasian + s_pooled/nAfrican)^0.5
+
+diff_estimate = uCaucasian-uAfrican
+ts90 <- -qt((1-0.90)/2,df=nAfrican-1,lower.tail=T)
+CI90_prostate = diff_estimate + c(-1,1)*ts90*stderr_prostate
+
+ts95 <- -qt((1-0.95)/2,df=nAfrican-1,lower.tail=T)
+CI95_prostate = diff_estimate + c(-1,1)*ts95*stderr_prostate
+
+ts99 <- -qt((1-0.99)/2,df=nAfrican-1,lower.tail=T)
+CI99_prostate = diff_estimate + c(-1,1)*ts99*stderr_prostate
+
+print(CI90_prostate)
+print(CI95_prostate)
+print(CI99_prostate)
+```
+
+Probabilistic:
+We can be 90% certain that the true population mean is somewhere between 1.94 and 4.46
+We can be 95% certain that the true population mean is somewhere between 1.69 and 4.71
+We can be 99% certain that the true population mean is somewhere between 1.21 and 5.19
+
+Practical
+In repeated sampling, 90% of of the intervals constructed in this way will straddle the mean.
+In repeated sampling, 95% of of the intervals constructed in this way will straddle the mean.
+In repeated sampling, 99% of of the intervals constructed in this way will straddle the mean.
+
+Assumptions:
+
+The scores for each of the populations are randomly selected from a population that is approximately normally distributed.
+
+Results:
+
+In this case, because even the 99% confidence interval did not straddle zero, the researchers can be 99% certain that there was a mean difference between the caucasian and African populations and that the average Caucasian scored between 1.21 and 5.19 points higher on the prostate test.
+
+
+#Resume work here.
+6.4.4 (3pts)
+
+The purpose of a study by Nozawa et al. was to determine the effectiveness of segmental wire fixation in athletes with spondylolysis. Between 1993 and 2000, 20 athletes (6 women and 14 men) with lumbar spondylolysis were treated surgically with the technique. The followign table gives the Japanese Orthopaedic Association (JOA) evaluation score for lower back pain syndrome from men and women prior to the surgery. The lower score indicates less pain.
+
+Construct the 90, 95, and 99 percent confidence intervals for the difference between population means. Where appropriate, state the assumptions that make your method valid. State the practical and probabilisitc interpretations of each interval that you construct. Consider the variables under consideration in each exercise, and state what use you think reseaerchers migh make of your results.
+
+```{r}
+#JOA_scores = data.frame(
+#  female = c(14,13,24,21,20,21,'','','','','','','',''),
+#  male = c(21,26,24,24,22,23,18,24,13,22,25,23,21,25)
+#)
+
+female_scores = c(14,13,24,21,20,21)
+male_scores = c(21,26,24,24,22,23,18,24,13,22,25,23,21,25)
+
+mean_female = mean(female_scores)
+sd_female = sd(male_scores)
+n_female = 6
+
+mean_male = mean(male_scores)
+sd_male = sd(male_scores)
+n_male = 14
+
+s_pooled = ((n_male-1)*sd_male^2+(n_female-1)*sd_female^2)/(n_male+n_female-2)
+# This calculates a pooled variance estimate. We can do this because the variances of the two samples are equal.
+
+stderr_spondy = (s_pooled/n_male + s_pooled/n_female)^0.5
+
+diff_estimate = mean_male-mean_female
+ts90 <- -qt((1-0.90)/2,df=n_female-1,lower.tail=T)
+CI90_spondy = diff_estimate + c(-1,1)*ts90*stderr_spondy
+
+ts95 <- -qt((1-0.95)/2,df=n_female-1,lower.tail=T)
+CI95_spondy = diff_estimate + c(-1,1)*ts95*stderr_spondy
+
+ts99 <- -qt((1-0.99)/2,df=n_female-1,lower.tail=T)
+CI99_spondy = diff_estimate + c(-1,1)*ts99*stderr_spondy
+
+print(CI90_spondy)
+print(CI95_spondy)
+print(CI99_spondy)
+```
+
+Probabilistic:
+We can be 90% certain that the true population mean is somewhere between 0.082 and 6.680
+We can be 95% certain that the true population mean is somewhere between -0.828 and 7.590
+We can be 99% certain that the true population mean is somewhere between -3.221 and 9.983
+
+Practical
+In repeated sampling, 90% of of the intervals constructed in this way will straddle the mean.
+In repeated sampling, 95% of of the intervals constructed in this way will straddle the mean.
+In repeated sampling, 99% of of the intervals constructed in this way will straddle the mean.
+
+Assumptions:
+
+The scores for each of the populations are randomly selected from a population that is approximately normally distributed.
+
+Results:
+
+In this case, the 90% confidence interval excluded a mean difference of 0. In other words, the stronger confidence intrevals would lead to the conclusion that no difference between the male and female populations was detected, and that it is possible that either population was slightly higher or slightly lower than the other. This would be an inconclusive result.
+
+6.4.6 (3pts)
+
+Transverse diameter measurements on the hearts of adult males and females gave the following results:
+
+Construct the 90, 95, and 99 percent confidence intervals for the difference between population means. Where appropriate, state the assumptions that make your method valid. State the practical and probabilisitc interpretations of each interval that you construct. Consider the variables under consideration in each exercise, and state what use you think reseaerchers migh make of your results.
+
+```{r}
+n_male = 12
+mean_male = 13.21 #cm
+sd_males = 1.05 #cm
+
+n_female = 9
+mean_female = 11.00 #cm
+sd_females = 1.01 #cm
+# Assume normally distributed populations with equal variances.
+
+s_pooled = ((n_male-1)*sd_male^2+(n_female-1)*sd_female^2)/(n_male+n_female-2)
+# This calculates a pooled variance estimate. We can do this because the variances of the two samples are equal.
+
+stderr_heart = (s_pooled/n_male + s_pooled/n_female)^0.5
+
+diff_estimate = mean_male-mean_female
+ts90 <- -qt((1-0.90)/2,df=n_female-1,lower.tail=T)
+CI90_heart = diff_estimate + c(-1,1)*ts90*stderr_heart
+
+ts95 <- -qt((1-0.95)/2,df=n_female-1,lower.tail=T)
+CI95_heart = diff_estimate + c(-1,1)*ts95*stderr_heart
+
+ts99 <- -qt((1-0.99)/2,df=n_female-1,lower.tail=T)
+CI99_heart = diff_estimate + c(-1,1)*ts99*stderr_heart
+
+print(CI90_heart)
+print(CI95_heart)
+print(CI99_heart)
+
+```
+
+Probabilistic:
+We can be 90% certain that the true population mean is somewhere between -0.541 and 4.961
+We can be 95% certain that the true population mean is somewhere between -1.202 and 5.622
+We can be 99% certain that the true population mean is somewhere between -2.755 and 7.175
+
+Practical
+In repeated sampling, 90% of of the intervals constructed in this way will straddle the mean.
+In repeated sampling, 95% of of the intervals constructed in this way will straddle the mean.
+In repeated sampling, 99% of of the intervals constructed in this way will straddle the mean.
+
+Assumptions:
+
+The scores for each of the populations are randomly selected from a population that is approximately normally distributed.
+
+Results:
+
+In this case, none of the confidence intervals excluded 0. In other words, we would conclude that there was no difference between the male and female populations was detected, and that it is possible that either population was slightly higher or slightly lower than the other. This would be an inconclusive result.
+
+6.7.4 (3pts)
+
+For multiple sclerosis patients we wish to estimate the mean age at which the disease was first diagnosed. We want a 95 percent confidence interval that is 10 years wide. If the population variance is 90, how large should our sample be.
+
+```{r}
+zs = qnorm(0.975)
+SD_age = 90^0.5
+ci_interval = 10
+ci_half = ci_interval/2
+n = (zs*SD_age/ci_half)^2
+print(ceiling(n)) # round up to the nearest integer
+
+```
+
+
+
+

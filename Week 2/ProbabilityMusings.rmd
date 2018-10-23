@@ -1,0 +1,150 @@
+---
+title: "Probability Work"
+author: "D. Zeitler"
+date: "September 7, 2017"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+We're just going to explore probabilities and random numbers with R and mosaic.
+
+```{r setup,error=FALSE,message=FALSE}
+#library(tidyverse)
+library(mosaic)
+#library(ggformula)
+```
+
+R provides several probability distributions with associated <dist> functions. 
+
+* d<dist>: density or probability
+* q<dist>: quantile
+* p<dist>: cumulative probability
+* r<dist>: sample random values
+
+Along with the extensive probability calculations provided in R, the mosaic package provides a couple of useful functions.
+
+*xp<dist>: cumulative probability (right and left tail) with graphic
+*plot<dist>: plots pdf/pmf or cdf
+
+
+# First we will go through basic R probability, then mosaic stuff.
+
+Getting the probability for Z between -1.96 and 1.96 is easy:
+
+Subtracting the probability in the tails from one.
+```{r}
+1-pnorm(-1.96)*2
+```
+
+Using the definition, subtract the cdf at the lower limit from the cdf at the upper limit.
+```{r}
+pnorm(1.96) - pnorm(-1.96)
+```
+
+## Reverse probabilities
+
+We used 1.96, that's an approximate 95% value. Get the z-value that gives us exactly 0.95, not just close.
+
+```{r}
+qnorm(.025)
+```
+
+Or if we don't want to think about removing that negative sign... 
+
+```{r}
+qnorm(1-.025)
+```
+
+These are all using left tail probabilities. We can easily do right tail probabiliteis.
+
+```{r}
+pnorm(1.96,lower.tail = FALSE)
+qnorm(.025,lower.tail = FALSE)
+```
+
+Another neat trick is to put the value right into my text, say here: `r qnorm(.025,lower.tail=F)`.
+
+# Maybe some graphics and summaries
+
+```{r echo=FALSE}
+data(cars)
+summary(cars)
+gf_point(dist~speed,data=cars)
+```
+
+# Look at speed
+
+```{r}
+histogram(~speed,data=cars)
+```
+```{r}
+histogram(~dist,data=cars)
+```
+
+Although we can assess normality by looking at the histogram, a better way is to use a quantile plot.
+
+```{r}
+gf_qq(~speed,data=cars) %>%
+  gf_qqline(~speed,data=cars)
+```
+
+```{r}
+gf_qq(~dist,data=cars) %>%
+  gf_qqline(~dist,data=cars)
+```
+
+# further probability stuff
+
+Let's say we're making widgets. They're produced with a mean diameter 34 and standard deviation of 3.
+
+What is the probability of getting widgets that are smaller than 24.
+
+```{r}
+pnorm(24,lower.tail = T,mean = 34, sd = 3)
+```
+
+# integrating
+Probability Z < 0.
+```{r}
+integrate(dnorm, -Inf, 0)
+```
+
+# mosaic functions
+
+## xpnorm
+```{r}
+xpnorm(1.96, mean=0, sd=1)
+```
+
+## plotDist
+```{r}
+plotDist('norm', mean=0, sd=1, kind='cdf',main='cdf')
+plotDist('norm', mean=0, sd=1, kind='qq',main='q-q')
+plotDist('norm', mean=0, sd=1, kind='density',main='density')
+plotDist('norm', mean=0, sd=1, kind='histogram',main='histogram')
+```
+plotDist can be used for discrete too.
+
+
+```{r}
+plotDist('binom', size=25, prob=.25, kind='cdf',main='cdf')
+plotDist('binom', size=25, prob=.25, kind='qq',main='q-q')
+plotDist('binom', size=25, prob=.25, kind='density',main='density')
+plotDist('binom', size=25, prob=.25, kind='histogram',main='histogram')
+```
+
+Overlaying things:
+
+```{r}
+plotDist("binom", size=100, prob=.3, col='black', lwd=3, pch=16)
+plotDist("norm", mean=30, sd=sqrt(100*.3*.7), groups=abs(x-30)>6, type="h", under=TRUE)
+```
+
+
+Using fitdistr finds the distribution parameters based on a set of data. For example we generate 1000 standard normals and try fitting it to the normal distribution. The output is the estimated mean and standard deviation with their standard deviations.
+```{r}
+fitdistr(rnorm(1000),densfun = 'normal')
+```
+
