@@ -1,0 +1,60 @@
+---
+title: "Homework 7"
+author: "Glenn clapp"
+due: "October 25, 2018"
+output: html_document
+---
+
+```{r setup, warning=F, message=F }
+library(RcmdrMisc)
+library(mosaic)
+library(readr)
+```
+
+8.3.2 (8 pts)
+
+McConville et al. report the effects of chewing one piece of nicotine gum (containing 2 mg nicotine) on tic frequency in patients whose Tourettes's disorder was inadequately controlled by haloperidol. The following are the tic frequencies under four conditions. 
+
+After eliminating patient effects, can we conclude that the mean number of tics differs among the four donditions? let $\alpha$ = 0.01.
+
+```{r}
+alpha = 0.01
+TIC = read_csv("EXR_C08_S03_02.csv")
+
+```
+8.3.4 (8 pts)
+
+The nursing supervisor in a local health department wished to study the influence of time of day on length of home visits by the nursing staff. It was thought that individual differences among nurses might be large, so the nurse was used as a blocking factor. The nursing supervisor collected the following data:
+
+Do these data provide sufficient evidence to indicate a difference in length of home visit amont the different times of day? let $\alpha$ = 0.05
+
+```{r}
+NURSE = read_csv("EXR_C08_S03_04.csv")
+```
+
+8.3.6 (6 pts)
+
+In a study by Valencia et al. the effects of environmental temperature and humidity on 24-hour energy expenditure were measured using whole-body indirect calorimetry in eight normal-weight young men who wore standardized light clothing and followed a controlled activity regimen. Temperature effects were assessed by measurements at 20, 23, 26, and 30 degrees Celsius at ambient humidity and at 20 and 30 degrees Celsius with high humidity. what is the blocking variable? The treatment variable? How many blocks are there? How many treatments? Construct an ANOVA table in which you specify the sources of variability and the degrees of freedom for each. What are the experimental units? What extraneous variables can you think of whose effects would be included in the error term?
+
+8.5.2 (8 pts)
+
+Researcher at a trauma center wished to develop a program to help brain-damaged trauma victims regain an acceptable level of independence. An experiment involving 72 subjects with the same degree of brain damage was conducted. The objective was to compare different combinations of psychiatric treatment and physical therapy. Each subject was assigned to one of 24 different combinations of four types of psychiatric treatment and six physical therapy programs. There were three subjects in each combination. The response variable is the number of months elapsing between initiation of therapy and time at which the patient was able to function independently. The results were as follows:
+
+```{r}
+TRAUMA = read_csv("EXR_C08_S05_02.csv")
+```
+
+Can we conclude on the basis of these data that the different psychiatric treatment programs have different effects? Can one conclude that the physical therapy programs differ in effectiveness? Can one conclude that there is interaction between psychiatric treatment programs and physical therapy programs? Let $\alpha$ = 0.05 for each test.
+
+8.5.4 (8 pts)
+
+The purpose of a study by Porcellini et al. was to study the difference in CD4 cell response in patients taking highly active antiretroviral therapy (HAART, treatment 1) and patients taking HAART plus intermittent interleukin (IL-2, treatment 2). Another factor of interest was the HIV-RNA plasma count at baseline of study. Subjects were classified as having fewer than 50 copies/ml (plasma 1) or having 50 or more copies/ml (plasma 2). The outcome variable is the percent change in CD4 T cell count from baseline to 12 months of treatment. Can one conclude that there is a difference in the percent change in CD4 T cell count between the two treatments? The results are shown in the following table. Can one conclude that there is a difference in the percent change in CD4 T cell count between those who have fewer than 50/ml plasma copies of HIV-RNA and those who do not? Can one conclude that there is interaction between treatments and plasma levels? Let $\alpha$ = 0.05 for each test.
+
+```{r}
+CELLS = read_csv("EXR_C08_S05_04")
+
+```
+
+8.5.6 (3 pts)
+
+A study by Meltzer et al. examined the response to 5 mg desloratadine, an H1-receptor antagonist, in patients with seasonal alergies. During the fall allergy season, 172 were randomly assigned to receive a placebo. Subjects took the medication for 2 weeks after which changs in the nasal symptom score were calculated. A significant reduction was noticed in the treatment group compared to the placebo group, but gender was not a significant factor. What are the factors in the study? At how many levels does each occur? What is the response variable?

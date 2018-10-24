@@ -1,0 +1,199 @@
+---
+title: "RCBD and 2-way ANOVA examples"
+author: "David Zeitler"
+date: "`r as.character(Sys.Date())`"
+output: pdf_document
+---
+
+```{r setup, warning=F, message=F }
+library(RcmdrMisc)
+library(mosaic)
+library(readr)
+```
+
+# Example 8.3.1 Randomized Complete Block Design (RCBD)
+
+```{r}
+Example8.3.1 <- 
+  read_csv("EXA_C08_S03_01.csv")
+```
+
+Convert the numeric input to a factor.
+```{r}
+Example8.3.1 <- mutate(Example8.3.1,
+  ageGroup = factor(ageGroup, labels=c('Under 20','20 to 29','30 to 39','40 to 49','50 and over')),
+  method = factor(method)
+)
+```
+
+Run the ANOVA using the linear model command, giving it the model time ~ ageGroup + method.
+
+Note that we didn't check for conditions first. With more advanced
+models like this, we use the model residuals to check for conditions
+and so need to actually run the model before we can check them.
+
+The exception to the above is running a Levene's test. However we
+cannot run a Levene's test with the RCBD design when we have only one
+replicate like we have here.
+
+```{r}
+LinearModel.1 <- lm(time ~ ageGroup + method, data=Example8.3.1)
+summary(LinearModel.1)
+```
+```{r}
+anova(LinearModel.1)
+```
+
+```{r}
+LinearModel.1 <- lm(time ~ ageGroup +method, data=Example8.3.1)
+anova(LinearModel.1)
+```
+
+To check for normality we can look at a normal probability plot of the
+residuals from the model. We get this plot from the model menu under graphs.
+
+Recall that the model is
+$x_{ij}=\mu+\beta_i+\tau_j+\epsilon_{ij}$ where the error term
+$\epsilon_{ij}$ is a zero mean normal random variable. We see here
+that while things look pretty good, there are a couple of points that
+may indicate some deviation from normality. Since ANOVA is relatively
+robust to the normality assumption, we won't worry about this minor
+deviation.
+
+```{r}
+gf_qq(~residuals(LinearModel.1)) %>%
+  gf_qqline()
+```
+We should also look at the residuals by predictions.
+```{r}
+gf_point(rstandard(LinearModel.1)~predict(LinearModel.1)) %>%
+  gf_hline(yintercept=0)
+```
+
+Our conditions appear to be ok for the model, so take a look back at
+the Anova table. We see that both ageGroup and method are strongly
+significant. The ageGroup factor is our block and having it
+significant just tells us that we were right to block our
+experiment. Our primary null hypothesis is that the methods are no
+different and we see that we should be rejecting it.
+
+Looking at the component residual plots gives us a look at the
+response to each factor with the effect of the other removed. We're primarily interessted here in the method plot.
+
+```{r}
+crPlots(LinearModel.1, span=0.5)
+```
+
+Next we look at effect or means plots by each factor, these are more
+common than component + residual plots and are similar to the
+confidence interval plots for one-way and the confidence interval
+plots shown on page 342 of your text.
+
+```{r}
+library(effects)
+plot(allEffects(LinearModel.1))
+```
+
+Note that we did not do pairwise comparisons. These are possible, but
+are more difficult than they were for the one-way model and we have
+enough to work on already $\ddot\smile$.
+
+# Example 8.5.2 2-way ANOVA with interaction
+
+```{r}
+Example8.5.2 <- 
+  read_csv("EXA_C08_S05_02.csv")
+```
+
+Convert factor A and B to PatientType and NurseAge with appropriate levels.
+
+Note: I really hate these minitab examples. No names on variables,
+hard to read, crap with no excuse... Glad we're working with R.
+
+```{r}
+Example8.5.2 <- mutate(Example8.5.2, 
+  PatientType = factor(A, labels=c('Cardiac','Cancer','C.V.A.','Tuberculosis')),
+  NurseAge    = factor(B, labels=c('20 to 29','30 to 39','40 to 49','50 and over'))
+)
+```
+
+Look at the boxplots of the response by each factor. These give us an
+initial idea of what's going on. Note the potential problem with
+equality of variance with respect to nurseAge.
+
+```{r}
+gf_boxplot(HOME~NurseAge, data=Example8.5.2)
+```
+
+```{r}
+gf_boxplot(HOME~PatientType, data=Example8.5.2)
+```
+
+The full box plots for the model with interaction would use plots for each of the 16 cells.
+```{r}
+gf_boxplot(HOME~PatientType:NurseAge,data=Example8.5.2,
+       scales=list(x=list(rot=90)))
+```
+
+Let's run a Levene's test here. We get a p-value of 0.2534, so we don't reject the hypothesis of equal variances. We'll keep going.
+
+```{r}
+leveneTest(HOME ~ NurseAge*PatientType, data=Example8.5.2, center="mean")
+```
+
+Run the model using the linear model procedure and get an Anova table again. Note the '*' in the model formula. This gives us both the main effects and interaction term.
+
+```{r}
+LinearModel.2 <- lm(HOME ~ NurseAge*PatientType, data=Example8.5.2)
+anova(LinearModel.2)
+```
+```{r}
+summary(LinearModel.2)
+```
+```{r}
+gf_boxplot(HOME~PatientType|NurseAge,data=Example8.5.2,
+       scales=list(x=list(rot=90)))
+gf_boxplot(HOME~NurseAge|PatientType,data=Example8.5.2,
+       scales=list(x=list(rot=90)))
+```
+
+This Anova table is slightly more complex. Along with the main effects
+NurseAge and PatientType, we have a new line labeled
+NurseAge:PatientType. This is the interaction term that captures
+different responses to PatientType depending on the NurseAge
+category. In particular this interaction is significant. We would
+*much* rather it not be significant. Many statisticians suggest
+stopping at this point and not looking at main effects since they
+cannot be considered individually with this interaction
+significant. What this really means is that we cannot look at the
+length of home visit for different types of patients without first
+considering the age of the nurse (or the other way around). This is a
+complex model.
+
+Let's finish looking at our conditions.
+```{r fig.height=8}
+gf_point(residuals(LinearModel.2)~predict(LinearModel.2)) %>% gf_hline(yintercept = 0)
+```
+
+```{r}
+gf_qq(~residuals(LinearModel.2)) %>% gf_qqline()
+```
+
+We see variance 'fan out' in the residual plot and possible normality problems in the high end of the qq-plot. We will accept this for now, but make note of it.
+
+Now let's take a look at some means plots. We didn't do this for the
+RCBD analysis, but it's important here. It gives us a good picture of
+the interaction that's going on. We're choosing to see the plots with
+95% confidence intervals about the means.
+
+```{r}
+with(Example8.5.2, plotMeans(HOME, NurseAge, PatientType, error.bars="conf.int", level=0.95))
+with(Example8.5.2, plotMeans(HOME, PatientType, NurseAge, error.bars="conf.int", level=0.95))
+```
+
+This kind of plot takes a bit of time to absorb. First note that we
+have 4 age groups across the x axis. The y axis is the mean of the
+length of home visit (response). There are 4 different lines with
+different colors and symbols, one for each patient type. The
+interaction we're seeing comes from the fact that those four lines are
+not even close to parallel and sometimes cross. 
