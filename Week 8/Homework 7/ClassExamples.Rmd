@@ -37,7 +37,7 @@ cannot run a Levene's test with the RCBD design when we have only one
 replicate like we have here.
 
 ```{r}
-LinearModel.1 <- lm(time ~ ageGroup + method, data=Example8.3.1)
+LinearModel.1 <- lm(time ~ ageGroup + method, data=Example8.3.1)#+method indicates that method is a blocking factor.
 summary(LinearModel.1)
 ```
 ```{r}

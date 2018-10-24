@@ -15,13 +15,16 @@ library(readr)
 
 McConville et al. report the effects of chewing one piece of nicotine gum (containing 2 mg nicotine) on tic frequency in patients whose Tourettes's disorder was inadequately controlled by haloperidol. The following are the tic frequencies under four conditions. 
 
-After eliminating patient effects, can we conclude that the mean number of tics differs among the four donditions? let $\alpha$ = 0.01.
+After eliminating patient effects, can we conclude that the mean number of tics differs among the four conditions? let $\alpha$ = 0.01.
 
 ```{r}
 alpha = 0.01
 TIC = read_csv("EXR_C08_S03_02.csv")
-
+TIC
+LinearModel.TIC <- lm(Numtics ~ METHOD + PATIENT, data=TIC)#+method indicates that method is a blocking factor.
+summary(LinearModel.TIC)
 ```
+
 8.3.4 (8 pts)
 
 The nursing supervisor in a local health department wished to study the influence of time of day on length of home visits by the nursing staff. It was thought that individual differences among nurses might be large, so the nurse was used as a blocking factor. The nursing supervisor collected the following data:
@@ -29,12 +32,23 @@ The nursing supervisor in a local health department wished to study the influenc
 Do these data provide sufficient evidence to indicate a difference in length of home visit amont the different times of day? let $\alpha$ = 0.05
 
 ```{r}
-NURSE = read_csv("EXR_C08_S03_04.csv")
+NUR = read_csv("EXR_C08_S03_04.csv")
+NUR
+LinearModel.NURSE <- lm(LENGTH ~ TOD + NURSE, data=NUR)#+method indicates that method is a blocking factor.
+summary(LinearModel.NURSE)
 ```
+
+Yes, there is sufficient evidence to suggest that the length of the visit is dependent on the time of day even when
+variation between nurses is removed as a blocking factor.
 
 8.3.6 (6 pts)
 
 In a study by Valencia et al. the effects of environmental temperature and humidity on 24-hour energy expenditure were measured using whole-body indirect calorimetry in eight normal-weight young men who wore standardized light clothing and followed a controlled activity regimen. Temperature effects were assessed by measurements at 20, 23, 26, and 30 degrees Celsius at ambient humidity and at 20 and 30 degrees Celsius with high humidity. what is the blocking variable? The treatment variable? How many blocks are there? How many treatments? Construct an ANOVA table in which you specify the sources of variability and the degrees of freedom for each. What are the experimental units? What extraneous variables can you think of whose effects would be included in the error term?
+
+The blocking variable is the men themselves. There is likely large variation between them in any case. The treatment
+variables are the temperatures and humidity. Temperature has 3 DOF and humidity has 1. The experimental units are
+calories of energy expenditure. 1 block, 2 treatments. The error term should include ##still needs an answer##
+##Construct a table.##
 
 8.5.2 (8 pts)
 
@@ -42,6 +56,7 @@ Researcher at a trauma center wished to develop a program to help brain-damaged 
 
 ```{r}
 TRAUMA = read_csv("EXR_C08_S05_02.csv")
+TRAUMA
 ```
 
 Can we conclude on the basis of these data that the different psychiatric treatment programs have different effects? Can one conclude that the physical therapy programs differ in effectiveness? Can one conclude that there is interaction between psychiatric treatment programs and physical therapy programs? Let $\alpha$ = 0.05 for each test.
