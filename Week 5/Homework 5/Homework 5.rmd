@@ -28,7 +28,7 @@ subjects = data.frame(
 t.test(subjects$age,var.equal=T,mu=60)
 favstats(subjects$age)
 
-33.```
+```
 Yes, a 95% confidence interval estimates the true mean to be between 50.21 and 59.67. The entirety of that interval is less than 60.
 
 7.2.4 (3pts)
