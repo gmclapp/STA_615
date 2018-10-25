@@ -154,9 +154,9 @@ print(upper_breast)
 
 6.4.2 (3pts)
 
-Chan et al. developed a questionnaire to assess knowledge of prostate cancer. There was a total of 36 questions to which respondents could answer "agree," "disagree," or "don't know." Scores could range from 0 to 36. The mean scores for Caucasian study participants was 20.6 with a standard deviation of 5.8, while the mean scores for African-American men was 17.4 with a standard deviation of 5.8. The number of Caucasian study participants was 185, and the number of African-Americans was 86.
+Chan et al. developed a questionnaire to assess knowledge of prostate cancer. There were a total of 36 questions to which respondents could answer "agree," "disagree," or "don't know." Scores could range from 0 to 36. The mean score for Caucasian study participants was 20.6 with a standard deviation of 5.8, while the mean score for African-American men was 17.4 with a standard deviation of 5.8. The number of Caucasian study participants was 185, and the number of African-Americans was 86.
 
-Construcct the 90, 95, and 99 percent confidence intervals for the difference between population means. Where appropriate, state the assumptions that make your method valid. State the practical and probabilisitc interpretations of each interval that you construct. Consider the variables under consideration in each exercise, and state what use you think reseaerchers migh make of your results.
+Construct the 90, 95, and 99 percent confidence intervals for the difference between population means. Where appropriate, state the assumptions that make your method valid. State the practical and probabilistic interpretations of each interval that you construct. Consider the variables under consideration in each exercise, and state what use you think researchers might make of your results.
 
 ```{r}
 uCaucasian = 20.6
@@ -167,7 +167,7 @@ uAfrican = 17.4
 sdAfrican = 5.8
 nAfrican = 86
 
-s_pooled = ((nCaucasian-1)*sdCaucasian^2+(nAfrican-1)*sdAfrican^2)/(nCaucasian+nAfrican-2)
+s_pooled = (((nCaucasian-1)*sdCaucasian^2+(nAfrican-1)*sdAfrican^2)/(nCaucasian+nAfrican-2))^0.5
 # This calculates a pooled variance estimate. We can do this because the variances of the two samples are equal.
 
 stderr_prostate = (s_pooled/nCaucasian + s_pooled/nAfrican)^0.5
@@ -211,7 +211,7 @@ In this case, because even the 99% confidence interval did not straddle zero, th
 
 The purpose of a study by Nozawa et al. was to determine the effectiveness of segmental wire fixation in athletes with spondylolysis. Between 1993 and 2000, 20 athletes (6 women and 14 men) with lumbar spondylolysis were treated surgically with the technique. The followign table gives the Japanese Orthopaedic Association (JOA) evaluation score for lower back pain syndrome from men and women prior to the surgery. The lower score indicates less pain.
 
-Construct the 90, 95, and 99 percent confidence intervals for the difference between population means. Where appropriate, state the assumptions that make your method valid. State the practical and probabilisitc interpretations of each interval that you construct. Consider the variables under consideration in each exercise, and state what use you think reseaerchers migh make of your results.
+Construct the 90, 95, and 99 percent confidence intervals for the difference between population means. Where appropriate, state the assumptions that make your method valid. State the practical and probabilistic interpretations of each interval that you construct. Consider the variables under consideration in each exercise, and state what use you think researchers might make of your results.
 
 ```{r}
 #JOA_scores = data.frame(
@@ -272,7 +272,7 @@ In this case, the 90% confidence interval excluded a mean difference of 0. In ot
 
 Transverse diameter measurements on the hearts of adult males and females gave the following results:
 
-Construct the 90, 95, and 99 percent confidence intervals for the difference between population means. Where appropriate, state the assumptions that make your method valid. State the practical and probabilisitc interpretations of each interval that you construct. Consider the variables under consideration in each exercise, and state what use you think reseaerchers migh make of your results.
+Construct the 90, 95, and 99 percent confidence intervals for the difference between population means. Where appropriate, state the assumptions that make your method valid. State the practical and probabilistic interpretations of each interval that you construct. Consider the variables under consideration in each exercise, and state what use you think researchers might make of your results.
 
 ```{r}
 n_male = 12
