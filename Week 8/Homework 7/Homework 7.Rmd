@@ -48,8 +48,15 @@ In a study by Valencia et al. the effects of environmental temperature and humid
 The blocking variable is the men themselves. There is likely large variation between them in any case. The treatment
 variables are the temperatures and humidity. Temperature has 3 DOF and humidity has 1. The experimental units are
 calories of energy expenditure. 1 block, 2 treatments. The error term should include ##still needs an answer##
-##Construct a table.##
-
+```{r}
+#CAL = data.frame(
+#  individual = c(),
+#  temperature = c(20,23,26,30),
+#  humidity = c("ambient","high"),
+#  calories = c()
+#)
+#LinearModel.cal <- lm(time ~ ageGroup + method, data=Example8.3.1)#+method indicates that method is a blocking factor.
+```
 8.5.2 (8 pts)
 
 Researcher at a trauma center wished to develop a program to help brain-damaged trauma victims regain an acceptable level of independence. An experiment involving 72 subjects with the same degree of brain damage was conducted. The objective was to compare different combinations of psychiatric treatment and physical therapy. Each subject was assigned to one of 24 different combinations of four types of psychiatric treatment and six physical therapy programs. There were three subjects in each combination. The response variable is the number of months elapsing between initiation of therapy and time at which the patient was able to function independently. The results were as follows:
@@ -57,19 +64,40 @@ Researcher at a trauma center wished to develop a program to help brain-damaged 
 ```{r}
 TRAUMA = read_csv("EXR_C08_S05_02.csv")
 TRAUMA
+gf_boxplot(MONTHS~PSYCH,data=TRAUMA)
+gf_boxplot(MONTHS~PHYS,data = TRAUMA)
+#leveneTest(MONTHS~PSYCH*PHYS, data=TRAUMA, center="mean")
+
+LinearModel.TRAUMA <- lm(MONTHS ~ PSYCH*PHYS, data=TRAUMA)
+anova(LinearModel.TRAUMA)
 ```
 
 Can we conclude on the basis of these data that the different psychiatric treatment programs have different effects? Can one conclude that the physical therapy programs differ in effectiveness? Can one conclude that there is interaction between psychiatric treatment programs and physical therapy programs? Let $\alpha$ = 0.05 for each test.
+
+
 
 8.5.4 (8 pts)
 
 The purpose of a study by Porcellini et al. was to study the difference in CD4 cell response in patients taking highly active antiretroviral therapy (HAART, treatment 1) and patients taking HAART plus intermittent interleukin (IL-2, treatment 2). Another factor of interest was the HIV-RNA plasma count at baseline of study. Subjects were classified as having fewer than 50 copies/ml (plasma 1) or having 50 or more copies/ml (plasma 2). The outcome variable is the percent change in CD4 T cell count from baseline to 12 months of treatment. Can one conclude that there is a difference in the percent change in CD4 T cell count between the two treatments? The results are shown in the following table. Can one conclude that there is a difference in the percent change in CD4 T cell count between those who have fewer than 50/ml plasma copies of HIV-RNA and those who do not? Can one conclude that there is interaction between treatments and plasma levels? Let $\alpha$ = 0.05 for each test.
 
 ```{r}
-CELLS = read_csv("EXR_C08_S05_04")
+CELLS = read_csv("EXR_C08_S05_04.csv")
+CELLS
 
+CELLS <- mutate(CELLS, 
+  TREAT = factor(TREAT, labels=c('HAART','IL-2')),
+  PLASMA    = factor(PLASMA, labels=c('<50mL','>=50mL'))
+)
+CELLS
+
+LinearModel.CELLS <- lm(PERCENT ~ TREAT*PLASMA, data=CELLS)
+anova(LinearModel.CELLS)
 ```
+
+There is a difference between PLASMA levels, not between treatments, and no evidence to suggest an interaction.
 
 8.5.6 (3 pts)
 
 A study by Meltzer et al. examined the response to 5 mg desloratadine, an H1-receptor antagonist, in patients with seasonal alergies. During the fall allergy season, 172 were randomly assigned to receive a placebo. Subjects took the medication for 2 weeks after which changs in the nasal symptom score were calculated. A significant reduction was noticed in the treatment group compared to the placebo group, but gender was not a significant factor. What are the factors in the study? At how many levels does each occur? What is the response variable?
+
+the factors in the study are the drug given (including placebo) and gender. Gender has two levels, drug has 3 levels. The response variable is nasal symptom score.

@@ -111,6 +111,8 @@ Note: I really hate these minitab examples. No names on variables,
 hard to read, crap with no excuse... Glad we're working with R.
 
 ```{r}
+# This block of code simply assigns labels to the data and replaces it in place. It is not necessary for the
+# analysis.
 Example8.5.2 <- mutate(Example8.5.2, 
   PatientType = factor(A, labels=c('Cardiac','Cancer','C.V.A.','Tuberculosis')),
   NurseAge    = factor(B, labels=c('20 to 29','30 to 39','40 to 49','50 and over'))
