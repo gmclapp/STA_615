@@ -1,0 +1,289 @@
+---
+title: "Regression and correlation - Chapter 9,10 and 13.10"
+author: "Dr. David Zeitler"
+date: "`r as.character(Sys.Date())`"
+output: pdf_document
+---
+
+```{r echo=FALSE, message=F, warning=F}
+# include this code chunk as-is to set options
+knitr::opts_chunk$set(comment=NA, prompt=TRUE)
+options(xtable.comment = FALSE)
+library(RcmdrMisc)
+library(xtable)
+install.packages('xtable')
+library(MASS)
+library(mosaic)
+```
+# Example 9.3.1 - Regression concepts
+
+Model: $\hat{y}_i = \beta_0 + \beta_1 x_i + \epsilon_i, i=1,...,n$ where $\epsilon \sim N(0,\sigma)$
+
+```{r echo=FALSE}
+Exa9.3.1 <- 
+  read.csv("EXA_C09_S03_01.csv")
+```
+
+Get a scatterplot and annotate it. We're doing this for class, but a simple scatterplot is adequate for homework. You do need to know how to do the abline command though. Pay attention to abline(-216,3.46) below.
+
+NOTE: We're not using the mosaic package here.
+```{r}
+scatterplot(Y~X, data=Exa9.3.1, reg.line=T, smooth=F, spread=F, boxplots=T, span=0.5 )
+
+# No model line at y_bar
+abline(h=mean(Exa9.3.1$Y))
+text(70,90,expression(paste(bar(y),'=',101.89,sep='')))
+
+# Regression line
+abline(-216,3.46)
+text(75,135,expression(paste(hat(y),"= -216 + 3.46 x")))
+arrows(75,130,82,(-216+3.46*82))
+
+# Observation 103
+text(115,253,'103',pos = 4)
+
+# Prediction for 103
+points(115,-216+3.46*115,pch='X')
+
+# Residual (unexplained variation)
+lines(c(115,115),c(253,-216+3.46*115),col='red')
+text(115,220,'Unexplained\nVariation',col='red')
+text(115,200,expression(paste('( y -',hat(y),')',sep='')),col='red')
+
+# Explained variation
+lines(c(115,115),c(mean(Exa9.3.1$Y),-216+3.46*115),col='blue')
+text(115,160,'Explained\nVariation',col='blue')
+text(115,125,expression(paste('(',hat(y),'-',bar(y),')',sep='')),col='blue')
+
+# Total variation
+lines(c(110,110,112),c(101.89,253,253))
+text(95,225,'Total\nVariation')
+text(95,205,expression(paste('(y-',bar(y),')',sep='')))
+arrows(100,225,110,200)
+```
+
+# Example 9.7.1 - Simple Linear Regression
+Now let's apply it.
+```{r}
+Example9.7.1 <- 
+  read.csv("EXA_C09_S07_01.csv")
+xyplot(CV~HEIGHT,data=Example9.7.1)
+```
+
+```{r}
+RegModel.1 <- lm(CV~HEIGHT, data=Example9.7.1)
+summary(RegModel.1)
+```
+
+Let's make a residual.analysis function to save typing.
+```{r}
+residual.analysis <- function(model) {
+  print( xyplot(rstandard(model)~predict(model)) )
+  print( qqmath(resid(model),
+                panel=function(...){
+                  panel.qqmath(...)
+                  panel.qqmathline(resid(model))
+                })
+  )
+}
+```
+
+Now check our residuals.
+```{r}
+residual.analysis(RegModel.1)
+```
+Residuals look fine.
+
+Now do our hypothesis tests.
+```{r}
+summary(RegModel.1)
+```
+The overall F-test looks at the entire model and the t-test on the 'HEIGHT' line tests for $\beta_1 = 0$. In this case (SLR) the two are identical. That will not be true shortly.
+
+We can get confidence intervals for individual parameters using confint.
+```{r}
+coef(RegModel.1)
+confint(RegModel.1) #These are confidence intervals on the coeefficients of the model
+```
+
+And both prediction and confidence intervals with predict. Note that prediction intervals are for single data points and so are wider.
+```{r}
+predict(RegModel.1,new=data.frame(HEIGHT=150),interval='confidence')
+predict(RegModel.1,new=data.frame(HEIGHT=150),interval='predict')
+```
+
+```{r}
+scatterplot(CV~HEIGHT, reg.line=lm, smooth=FALSE, spread=TRUE, id.method='mahal', id.n 
+  = 2, boxplots=T, span=0.5, data=Example9.7.1)
+```
+
+Let's look at a specific point, 153.
+```{r}
+Example9.7.1[153,]
+```
+
+Predictions and confidence intervals for several values of HEIGHT.
+```{r}
+predict(RegModel.1,data.frame(HEIGHT=c(181,182,183,184)),interval='prediction') #prediction of individuals
+predict(RegModel.1,data.frame(HEIGHT=c(181,182,183,184)),interval='confidence') #prediction of mean
+```
+
+Illustrate the full confidence and prediction intervals.
+```{r}
+CI <- predict(RegModel.1,interval='confidence')
+PI <- predict(RegModel.1,interval='predict')
+scatterplot(CV~HEIGHT, reg.line=lm, smooth=FALSE, spread=TRUE, boxplots=F, span=0.5, data=Example9.7.1)
+lines(Example9.7.1$HEIGHT,CI[,2],lty=2,col='blue') # confidence intervals plotted in blue.
+lines(Example9.7.1$HEIGHT,CI[,3],lty=2,col='blue')
+lines(Example9.7.1$HEIGHT,PI[,2],lty=3,col='red') # prediction intervals plotted in red.
+lines(Example9.7.1$HEIGHT,PI[,3],lty=3,col='red')
+```
+
+# Example 10.3.1 - Multiple Regression
+Model: $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \epsilon$ note the i index is left of for simplicity.
+
+```{r}
+Exa10.3.1 <- 
+  read.csv("EXA_C10_S03_01.csv")
+```
+
+We start by looking at the scatterplot matrix. Turn off the smoothing, it's of no use here and just
+adds noise to the plots. We would like to see a linear relationship
+between the dependent variable and one or more of the independent variables, but not between
+any independent variables. Our dependent variable is CDA which shows a weak relationship with
+each of the indepent variables. Age and education level do not appear to have any significant
+relationship.
+
+```{r}
+splom(Exa10.3.1)
+```
+
+Using a little more sophisticated function we get better information.
+```{r}
+scatterplotMatrix(~AGE+CDA+EDLEVEL, reg.line=lm, smooth=FALSE, spread=FALSE, span=0.5, 
+  id.n=0, diagonal = 'density', data=Exa10.3.1)
+```
+
+The model is straight forward, just add the second independent variable.
+```{r results='asis'}
+RegModel.2 <- lm(CDA~AGE+EDLEVEL, data=Exa10.3.1)
+```
+
+Check the residuals just like we did for SLR.
+```{r}
+residual.analysis(RegModel.2)
+```
+Looks good.
+
+Run the summary. There's a bit more here than there was for SLR.
+```{r}
+summary(RegModel.2)
+```
+We still have the overall F-test at the bottom, but it's not equivalent to either of the AGE or EDLEVEL t-tests. The F-test null hypothesis is $H_0: \beta_1 = \beta_2 = 0$, i.e. there's nothing interesting in the model at all.
+Each of the model t-tests are significant in this case so both AGE and EDLEVEL are significant predictors of CDA.
+
+Now lets make a slightly nicer output from the summary of this model. It doesn't look good here, but comes out nicely in the pdf output. Note if you're using word output this doesn't work. For HTML output you need to change the parameters on the xtable call a bit. We also need to tell Rmarkdown not to mess with the output, i.e. leave results asis.
+```{r results='asis'}
+summary(RegModel.2) %>%
+  xtable(caption="Regression summary") %>%
+  print()
+```
+
+Parameter and estimate confidence intervals for age 68 and education level 12:
+```{r}
+confint(RegModel.2, level=0.95)
+predict(RegModel.2,data.frame(AGE=68,EDLEVEL=12),interval='confidence')
+predict(RegModel.2,data.frame(AGE=68,EDLEVEL=12),interval='predict')
+```
+
+Pretty output again.
+```{r results='asis'}
+print(xtable(confint(RegModel.2, level=0.95),caption="Parameter confidence intervals"))
+print(xtable(predict(RegModel.2,data.frame(AGE=68,EDLEVEL=12),interval='confidence'),
+             caption="Confidence interval for Age=68 and Education level = 12"))
+print(xtable(predict(RegModel.2,data.frame(AGE=68,EDLEVEL=12),interval='predict'),
+             caption="Confidence interval for Age=68 and Education level = 12"))
+```
+
+```{r}
+cor(Exa10.3.1,method="spearman")
+cor(Exa10.3.1,method="pearson")
+```
+
+# Exercise 10.6.1 - Multiple Correlation
+Multiple correlation looks at the correlation between variables after removing the effect of the others.
+```{r}
+Exa10.6.1 <- 
+  read.csv("EXA_C10_S06_01.csv")
+```
+
+```{r}
+scatterplotMatrix(~P+S+W, reg.line=lm, smooth=FALSE, spread=FALSE, span=0.5, id.n=0, 
+  diagonal = 'density', data=Exa10.6.1)
+```
+
+```{r}
+RegModel.3 <- lm(W~P+S, data=Exa10.6.1)
+residual.analysis(RegModel.3)
+```
+
+```{r}
+summary(RegModel.3)
+cor(Exa10.6.1[,c("P","S","W")], use="complete")
+partial.cor(Exa10.6.1[,c("P","S","W")], use="complete")
+```
+
+Pretty printed tables.
+```{r results='asis'}
+print(xtable(summary(RegModel.3),caption="Regression summary"))
+```
+
+```{r results='asis'}
+print(xtable(cor(Exa10.6.1[,c("P","S","W")], use="complete"),
+             caption="Correlations"))
+
+```
+
+```{r results='asis'}
+print(xtable(partial.cor(Exa10.6.1[,c("P","S","W")], use="complete")$R,
+             caption="Partial Correlations"))
+```
+
+# Rank Regression Section 13.10
+## Example 13.10.1
+```{r}
+Exa13.10.1 <- 
+  read.csv('EXA_C13_S10_01.csv') %>%
+  select(X,Y) %>%
+  rename( 
+    Age = X,
+    EEG.Output = Y
+  )
+```
+
+```{r}
+splom(Exa13.10.1)
+```
+
+```{r}
+cat('pearson:'); cor(EEG.Output~Age,data=Exa13.10.1,method='pearson')
+cat('spearman:'); cor(EEG.Output~Age,data=Exa13.10.1,method='spearman')
+```
+
+## Example 13.10.2
+```{r}
+Exa13.10.2 <-
+  read.csv('EXA_C13_S10_02.csv') %>%
+  select(-V1) %>%
+  rename(Age=V2,Mineral.Concentration=V3)
+```
+
+```{r}
+splom(Exa13.10.2)
+```
+
+```{r}
+cor(Mineral.Concentration~Age,data=Exa13.10.2,method='pearson')
+cor(Mineral.Concentration~Age,data=Exa13.10.2,method='spearman')
+```
+

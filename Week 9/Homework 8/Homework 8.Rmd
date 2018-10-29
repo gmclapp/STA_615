@@ -1,0 +1,27 @@
+---
+title: "Homework 8"
+author: "Glenn Clapp"
+date: "`r as.character(Sys.Date())`"
+output: pdf_document
+---
+
+```{r echo=FALSE, message=F, warning=F}
+# include this code chunk as-is to set options
+knitr::opts_chunk$set(comment=NA, prompt=TRUE)
+options(xtable.comment = FALSE)
+library(RcmdrMisc)
+library(xtable)
+install.packages('xtable')
+library(MASS)
+library(mosaic)
+```
+9.3.4 (2pts)
+9.4.2 (6pts)
+9.5.2(2pts)
+Chapter 9 review questions:
+16 (5pts)
+18 (5pts): Run both parametric and non-parametric correlations and comment on the differences seen.
+20 (5pts)
+13.10.4 (5pts): Show a scatterplot as well as doing the test.
+3 predictors: 10.3.2, 10.4.2, 10.5.2 all use 10.3.2 data (10pts)
+6 predictors: 10.3.6, 10.4.6, 10.5.6 All use 10.3.6 data (10pts)
