@@ -21,12 +21,62 @@ Reiss et al. compared point-of-care and standard hospital laboratory assays for 
 
 9.4.2 (6pts)
 
+A. Compute the coefficient of determination.
+B. Prepare an ANOVA table and use the F statistic to test the null hypothesis that $\beta_1$ = 0. Let $\alpha$ = 0.05.
+C. Use the t statistic to test the null hypothesis that $\beta_1$ = 0 at the 0.05 level of significane.
+D. Determine the p value for each hypothesis test.
+E. State your conclusions in terms of the problem.
+F. Construct the 95 percent confidence interval for $\beta_1$.
 
 9.5.2(2pts)
+Refer to Exercise 9.3.4 and let X = 1.6
+
 Chapter 9 review questions:
-16 (5pts)
+16 (5pts):
+A study by Scrogin et al. was designed to assess the effects of concurrent manipulations of dietary NaCl and calcium on blood pressure as well as blood pressure and catecholamine responses to stress. Subjects were salt-sensitive, spontaneously hypertensive male rats. Among the analyses performed by the investigators was a correlation between baseline blood pressure and plasma epinephrine concentration (E). The following data on these two variables were collected. Let $\alpha$ = 0.01.
+
 18 (5pts): Run both parametric and non-parametric correlations and comment on the differences seen.
+Maria Mathias conducted a study of hyperactive children. She measured the children's attitude, hyperactivity, and social behavior before and after treatment. The following table shows the 31 subjects the age and improvement scores from pre-treatment to post-treatment for attitude (ATT), social behavior (SOC), and hyperactivity (HYP). A negative score for HYP indicates an improvemnent in hyperactivity; a positive score in ATT or SOC indicates improvement. Perform an analysis to determine if there is evidence to indicate that age (years) is correlated with any of the three outcome variables. Let $\alpha$ = 0.05 for all tests.
+
 20 (5pts)
+The following are the pulmonary blood flow (PBF) and pulmonary blood volume (PBV) values recorded for 16 infants and children with congenital heart desease. Find the regression equation describing the linear relationship between the two variables, compute $r^2$, and test $H_0:\beta = 0$ by both the F test and the t test. Let $\alpha$ = 0.05.
+
 13.10.4 (5pts): Show a scatterplot as well as doing the test.
+Refer to Exercise 13.10.3. Nozawa et al. also calculated the Japanese Orthopaedic Association score for emasureing back pain (JOA). The results for the 20 subjects along with the duration of follow-up are shown in the following table. The higher the number, the lesser the degree of pain. Can we conclude from these data that in general there is a relationship between length of follow-up and JOA score at the time of the operation? Let $\alpha$ = 0.05.
+
 3 predictors: 10.3.2, 10.4.2, 10.5.2 all use 10.3.2 data (10pts)
+Family caregiving of older adults is more common in Korea than in the United States. Son et al. studied 100 caregivers of older adults with dementia in Seoul, South Korea. The dependent variable was caregiver burden as measured by the Korean Burden Inventory (KBI). Scores ranged from 28 to 140, with higher scores indicating higher burden. Explanatory variables were indexes that measured the following:
+
+ADL: Total activites of daily living (low scores indicate that the elderly perform activities independently).
+
+MEM: Memory and behavioral problems (higher scores indicate more problems).
+
+COG: Cognitive impairment (lower scores indicate a greater degree of cognitive impairment).
+
+A. Calcultate the coefficient of multiple determination
+B. Perform an analysis of variance
+C. Test the significance of each $\beta_i$(i>0). Let $\alpha$ = 0.05 for all tests of significance and determine the p value for all tests
+D. Construct a 95 percent confidence interval for each significant sample slope.
+
+E. Compute the y value and construct a 95 percent confidence and 95 percent prediction interval for $x_1j$=95 and $x_2j$=35. 
+
 6 predictors: 10.3.6, 10.4.6, 10.5.6 All use 10.3.6 data (10pts)
+The following data were collected on a simple random sample of 20 patients with hypertension. The variables are
+Y = mean arterial blood pressure (mmHg)
+$X_1$=age(years)
+$X_2$=weight(kg)
+$X_3$=body surface area($m^2$)
+$X_4$=duration of hypertension(years)
+$X_5$=basal bulse(bpm)
+$X_6$=measure of stress
+A. Calcultate the coefficient of multiple determination
+B. Perform an analysis of variance
+C. Test the significance of each $\beta_i$(i>0). Let $\alpha$ = 0.05 for all tests of significance and determine the p value for all tests
+D. Construct a 95 percent confidence interval for each significant sample slope.
+E. Compute the y value and construct a 95 percent confidence and 95 percent prediction interval for 
+$x_1j$=50
+$x_2j$=95
+$x_3j$=2.00
+$x_4j$=6.00
+$x_5j$=75
+$x_6j$=70
