@@ -81,10 +81,51 @@ confint(Regression.Model.REV16,level = 0.99) #These are confidence intervals on 
 
 There is enough evidence to conclude that there is a positive relationship between blood pressure and plasma. The confidence interval (alpha=0.01) is entirely above zero.
 
-#Resume work here#
-
 18 (5pts): Run both parametric and non-parametric correlations and comment on the differences seen.
 Maria Mathias conducted a study of hyperactive children. She measured the children's attitude, hyperactivity, and social behavior before and after treatment. The following table shows the 31 subjects the age and improvement scores from pre-treatment to post-treatment for attitude (ATT), social behavior (SOC), and hyperactivity (HYP). A negative score for HYP indicates an improvemnent in hyperactivity; a positive score in ATT or SOC indicates improvement. Perform an analysis to determine if there is evidence to indicate that age (years) is correlated with any of the three outcome variables. Let $\alpha$ = 0.05 for all tests.
+
+```{r}
+CHILD = read_csv("REV_C09_18.csv")
+scatterplot(ATT~AGE, data=CHILD, boxplots=F )
+scatterplot(HYP~AGE, data=CHILD, boxplots=F )
+scatterplot(SOC~AGE, data=CHILD, boxplots=F )
+
+Regression.Model.ATT <- lm(ATT~AGE, data=CHILD)
+Regression.Model.HYP <- lm(ATT~HYP, data=CHILD)
+Regression.Model.SOC <- lm(ATT~SOC, data=CHILD)
+
+summary(Regression.Model.ATT)
+summary(Regression.Model.HYP)
+summary(Regression.Model.SOC)
+
+residual.analysis(Regression.Model.ATT)
+residual.analysis(Regression.Model.HYP)
+residual.analysis(Regression.Model.SOC)
+
+coef(Regression.Model.ATT)
+coef(Regression.Model.HYP)
+coef(Regression.Model.SOC)
+
+confint(Regression.Model.ATT,level = 0.95) #These are confidence intervals on the coeefficients of the model
+confint(Regression.Model.HYP,level = 0.95)
+confint(Regression.Model.SOC,level = 0.95)
+```
+
+There is sufficient evidence to conclude that there is a relationship between attitude and age. However, there was not sufficient evidence to conclude that there was a relationship between either of the other characteristics and age at the 0.05 level. The following code block executes the non-parametric tests. For the Spearman test, the critical characteristic below which the null will be rejected is 0.3059 (n=31, alpha=0.05). This value is obtained from table P in appendix A.
+
+```{r}
+cat('Attitude w/ pearson:'); cor(ATT~AGE,data=CHILD,method='pearson')
+cat('Hyperactivity w/ pearson:'); cor(HYP~AGE,data=CHILD,method='pearson')
+cat('Social behavior w/ pearson:'); cor(SOC~AGE,data=CHILD,method='pearson')
+
+cat('\nAttitude w/ spearman:'); cor(ATT~AGE,data=CHILD,method='spearman')
+cat('Hyperactivity w/ spearman:'); cor(HYP~AGE,data=CHILD,method='spearman')
+cat('Social behavior w/ spearman:'); cor(SOC~AGE,data=CHILD,method='spearman')
+```
+
+Using the spearman test, both hyperactivity and social behavior had test statistics below the critical value and are considered significant. Interestingly, this result is flipped from the parametric test for every measure.
+
+#Resume here.#
 
 20 (5pts)
 The following are the pulmonary blood flow (PBF) and pulmonary blood volume (PBV) values recorded for 16 infants and children with congenital heart desease. Find the regression equation describing the linear relationship between the two variables, compute $r^2$, and test $H_0:\beta = 0$ by both the F test and the t test. Let $\alpha$ = 0.05.
