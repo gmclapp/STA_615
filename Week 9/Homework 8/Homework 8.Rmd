@@ -125,13 +125,31 @@ cat('Social behavior w/ spearman:'); cor(SOC~AGE,data=CHILD,method='spearman')
 
 Using the spearman test, both hyperactivity and social behavior had test statistics below the critical value and are considered significant. Interestingly, this result is flipped from the parametric test for every measure.
 
-#Resume here.#
 
 20 (5pts)
 The following are the pulmonary blood flow (PBF) and pulmonary blood volume (PBV) values recorded for 16 infants and children with congenital heart desease. Find the regression equation describing the linear relationship between the two variables, compute $r^2$, and test $H_0:\beta = 0$ by both the F test and the t test. Let $\alpha$ = 0.05.
+```{r}
+Pulmonary = read_csv("REV_C09_20.csv")
+
+Regression.Model.PB <- lm(PBF~PBV,data=Pulmonary)
+summary(Regression.Model.PB)
+residual.analysis(Regression.Model.PB)
+
+```
+
+The equation is PBF = 0.025PBV -0.028; $r^2$ = 0.3937.
+The F and p value are 9.091 and 0.0093 respectively at the $\alpha = 0.05$ level of significance which means that there is sufficient evidence to reject the null hypothesis in this case.
 
 13.10.4 (5pts): Show a scatterplot as well as doing the test.
-Refer to Exercise 13.10.3. Nozawa et al. also calculated the Japanese Orthopaedic Association score for emasureing back pain (JOA). The results for the 20 subjects along with the duration of follow-up are shown in the following table. The higher the number, the lesser the degree of pain. Can we conclude from these data that in general there is a relationship between length of follow-up and JOA score at the time of the operation? Let $\alpha$ = 0.05.
+Refer to Exercise 13.10.3. Nozawa et al. also calculated the Japanese Orthopaedic Association score for measuring back pain (JOA). The results for the 20 subjects along with the duration of follow-up are shown in the following table. The higher the number, the lesser the degree of pain. Can we conclude from these data that in general there is a relationship between length of follow-up and JOA score at the time of the operation? Let $\alpha$ = 0.05.
+
+```{r}
+backpain = read_csv("EXR_C13_S10_04.csv")
+scatterplot(JOA~MONTHS, data=backpain, boxplots=F )
+cat('JOA score w/ spearman non-parametric:'); cor(JOA~MONTHS,data=backpain,method='spearman')
+```
+
+There are 20 observations in this data. With an $\alpha = 0.05$ confidence level, and using table P in the appendix, the critical statistic value was found to be 0.3789. The value obtained was lower than this, leading us to reject the null hypothesis that there is no relationship between the JOA score and the duration of follow up.
 
 3 predictors: 10.3.2, 10.4.2, 10.5.2 all use 10.3.2 data (10pts)
 Family caregiving of older adults is more common in Korea than in the United States. Son et al. studied 100 caregivers of older adults with dementia in Seoul, South Korea. The dependent variable was caregiver burden as measured by the Korean Burden Inventory (KBI). Scores ranged from 28 to 140, with higher scores indicating higher burden. Explanatory variables were indexes that measured the following:
@@ -142,9 +160,34 @@ MEM: Memory and behavioral problems (higher scores indicate more problems).
 
 COG: Cognitive impairment (lower scores indicate a greater degree of cognitive impairment).
 
-A. Calcultate the coefficient of multiple determination
+
+```{r}
+care <- 
+  read.csv("EXR_C10_S03_02.csv")
+
+scatterplotMatrix(~KBI+ADL+MEM+COG, smooth=FALSE, 
+  diagonal = 'density', data=care)
+RegModel.care <- lm(KBI~ADL+MEM+COG, data=care)
+residual.analysis(RegModel.care)
+summary(RegModel.care)
+
+cor(care[,c("KBI","ADL","MEM","COG")], use="complete")
+partial.cor(care[,c("KBI","ADL","MEM","COG")], use="complete")
+```
+
+```{r}
+newdata = data.frame(ADL=c(95), MEM=c(35), COG=c(0))
+# This creates a point at which we're interested in the intervals. Note that a 
+# list of points could be defined with newdata = data.frame(X=c(1,2,3))
+predict(RegModel.care,newdata,interval = 'confidence')
+predict(RegModel.care,newdata,interval='predict')
+```
+R insisted that I have a value for all three independent variables to construct intervals. Only two are given in the problem statement. I expect that one of the three 'COG' is not significant and is to be excluded. I'm not sure how to do this in R.
+
+A. Calculate the coefficient of multiple determination
 B. Perform an analysis of variance
 C. Test the significance of each $\beta_i$(i>0). Let $\alpha$ = 0.05 for all tests of significance and determine the p value for all tests
+
 D. Construct a 95 percent confidence interval for each significant sample slope.
 
 E. Compute the y value and construct a 95 percent confidence and 95 percent prediction interval for $x_1j$=95 and $x_2j$=35. 
@@ -169,3 +212,24 @@ $x_3j$=2.00
 $x_4j$=6.00
 $x_5j$=75
 $x_6j$=70
+```{r}
+hypertension <- 
+  read.csv("EXR_C10_S03_06.csv")
+
+scatterplotMatrix(~Y+X1+X2+X3+X4+X5+X6, smooth=FALSE, 
+  diagonal = 'density', data=hypertension)
+RegModel.hypertension <- lm(Y~X1+X2+X3+X4+X5+X6, data=hypertension)
+residual.analysis(RegModel.hypertension)
+summary(RegModel.hypertension)
+
+cor(hypertension[,c("X1","X2","X3","X4","X5","X6")], use="complete")
+partial.cor(hypertension[,c("X1","X2","X3","X4","X5","X6")], use="complete")
+
+newdata = data.frame(X1=c(50),X2=c(95),X3=c(2.00),X4=c(6.00),X5=c(75),X6=c(70))
+# This creates a point at which we're interested in the intervals. Note that a 
+# list of points could be defined with newdata = data.frame(X=c(1,2,3))
+predict(RegModel.hypertension,newdata,interval = 'confidence')
+predict(RegModel.hypertension,newdata,interval='predict')
+```
+
+I think that his problem also suffers from the fact that I'm unsure how to eliminate factors that are not significant. I think that would substantially change my results.
