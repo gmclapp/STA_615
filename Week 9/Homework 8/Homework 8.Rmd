@@ -11,13 +11,40 @@ knitr::opts_chunk$set(comment=NA, prompt=TRUE)
 options(xtable.comment = FALSE)
 library(RcmdrMisc)
 library(xtable)
-install.packages('xtable')
 library(MASS)
 library(mosaic)
+library(readr)
+```
+
+This function will be used to analyze regression models throughout this homework.
+```{r}
+residual.analysis <- function(model) {
+  print( xyplot(rstandard(model)~predict(model)) )
+  print( qqmath(resid(model),
+                panel=function(...){
+                  panel.qqmath(...)
+                  panel.qqmathline(resid(model))
+                })
+  )
+}
 ```
 9.3.4 (2pts)
 
 Reiss et al. compared point-of-care and standard hospital laboratory assays for monitoring patients receiving a single anticoagulant or a regimen consisting of a combination of anticoagulants. It is quite common when comparing two measuring techniques, to use regression analysis in which one variable is used to predict another. In the present study, the researchers obtained measures of international normalized ratio (INR) by assay of capillary and venous blood samples collected from 90 subjects taking warfarin. INR, used especially when patients are receiving warfarin, measures the clotting ability of the blood. Point-of-care testing for INR was conducted with the CoaguChek assay product. Hospital testing was done with standard hospital laboratory assays. The authors used the hospital assay INR level to predict the CoaguChek INR level. The meaurements are given in the following table.
+
+```{r}
+Blood = read_csv("EXR_C09_S03_04.csv")
+scatterplot(Y~X, data=Blood, boxplots=F )
+Regression.Model <- lm(Y~X, data=Blood)
+summary(Regression.Model)
+residual.analysis(Regression.Model)
+
+coef(Regression.Model)
+confint(Regression.Model) #These are confidence intervals on the coeefficients of the model
+
+#predict(Regression.Model,new=data.frame(HEIGHT=150),interval='confidence')
+#predict(Regression.Model,new=data.frame(HEIGHT=150),interval='predict')
+```
 
 9.4.2 (6pts)
 
