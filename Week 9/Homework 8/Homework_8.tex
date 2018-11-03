@@ -1,0 +1,1114 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Homework 8},
+            pdfauthor={Glenn Clapp},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Homework 8}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Glenn Clapp}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2018-11-01}
+
+
+\begin{document}
+\maketitle
+
+This function will be used to analyze regression models throughout this
+homework.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{residual.analysis <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(model) \{}
+\OperatorTok{+}\StringTok{   }\KeywordTok{print}\NormalTok{( }\KeywordTok{xyplot}\NormalTok{(}\KeywordTok{rstandard}\NormalTok{(model)}\OperatorTok{~}\KeywordTok{predict}\NormalTok{(model)) )}
+\OperatorTok{+}\StringTok{   }\KeywordTok{print}\NormalTok{( }\KeywordTok{qqmath}\NormalTok{(}\KeywordTok{resid}\NormalTok{(model),}
+\OperatorTok{+}\StringTok{                 }\DataTypeTok{panel=}\ControlFlowTok{function}\NormalTok{(...)\{}
+\OperatorTok{+}\StringTok{                   }\KeywordTok{panel.qqmath}\NormalTok{(...)}
+\OperatorTok{+}\StringTok{                   }\KeywordTok{panel.qqmathline}\NormalTok{(}\KeywordTok{resid}\NormalTok{(model))}
+\OperatorTok{+}\StringTok{                 }\NormalTok{\})}
+\OperatorTok{+}\StringTok{   }\NormalTok{)}
+\OperatorTok{+}\StringTok{ }\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+9.3.4 (2pts)
+
+Reiss et al. compared point-of-care and standard hospital laboratory
+assays for monitoring patients receiving a single anticoagulant or a
+regimen consisting of a combination of anticoagulants. It is quite
+common when comparing two measuring techniques, to use regression
+analysis in which one variable is used to predict another. In the
+present study, the researchers obtained measures of international
+normalized ratio (INR) by assay of capillary and venous blood samples
+collected from 90 subjects taking warfarin. INR, used especially when
+patients are receiving warfarin, measures the clotting ability of the
+blood. Point-of-care testing for INR was conducted with the CoaguChek
+assay product. Hospital testing was done with standard hospital
+laboratory assays. The authors used the hospital assay INR level to
+predict the CoaguChek INR level. The meaurements are given in the
+following table.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{Blood =}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"EXR_C09_S03_04.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Parsed with column specification:
+cols(
+  Y = col_double(),
+  X = col_double()
+)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{scatterplot}\NormalTok{(Y}\OperatorTok{~}\NormalTok{X, }\DataTypeTok{data=}\NormalTok{Blood, }\DataTypeTok{boxplots=}\NormalTok{F )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{Regression.Model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Y}\OperatorTok{~}\NormalTok{X, }\DataTypeTok{data=}\NormalTok{Blood)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{summary}\NormalTok{(Regression.Model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = Y ~ X, data = Blood)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.7248 -0.3357 -0.1341  0.1306  2.0040 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.48848    0.18167   2.689  0.00858 ** 
+X            0.86251    0.08972   9.613 2.24e-15 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.64 on 88 degrees of freedom
+Multiple R-squared:  0.5122,    Adjusted R-squared:  0.5067 
+F-statistic: 92.41 on 1 and 88 DF,  p-value: 2.244e-15
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{residual.analysis}\NormalTok{(Regression.Model)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-3-2.pdf}
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-3-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{coef}\NormalTok{(Regression.Model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+(Intercept)           X 
+  0.4884797   0.8625108 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{confint}\NormalTok{(Regression.Model) }\CommentTok{#These are confidence intervals on the coeefficients of the model}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                2.5 %    97.5 %
+(Intercept) 0.1274485 0.8495109
+X           0.6842054 1.0408162
+\end{verbatim}
+
+9.4.2 (6pts)
+
+A. Compute the coefficient of determination. 0.8625108 B. Prepare an
+ANOVA table and use the F statistic to test the null hypothesis that
+\(\beta_1\) = 0. Let \(\alpha\) = 0.05. The F statistic is 92.41 C. Use
+the t statistic to test the null hypothesis that \(\beta_1\) = 0 at the
+0.05 level of significance. The p value is 2.24e-15 = 0 D. Determine the
+p value for each hypothesis test. E. State your conclusions in terms of
+the problem. There is sufficient evidence to conclude that \(\beta_1\)
+is not equal to 0. F. Construct the 95 percent confidence interval for
+\(\beta_1\). 0.6842 - 1.0408
+
+9.5.2(2pts) A. for the value of x indicated, A. contruct the 95 percent
+confidence interval for \(\mu_y|x\) and B. construct the 95 percent
+prediction interval for Y.
+
+Refer to Exercise 9.3.4 and let X = 1.6
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{newdata =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{X=}\FloatTok{1.6}\NormalTok{) }
+\OperatorTok{>}\StringTok{ }\CommentTok{# This creates a point at which we're interested in the intervals. Note that a }
+\ErrorTok{>}\StringTok{ }\CommentTok{# list of points could be defined with newdata = data.frame(X=c(1,2,3))}
+\ErrorTok{>}\StringTok{ }\KeywordTok{predict}\NormalTok{(Regression.Model,newdata,}\DataTypeTok{interval =} \StringTok{'confidence'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+       fit      lwr      upr
+1 1.868497 1.725432 2.011562
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{predict}\NormalTok{(Regression.Model,newdata,}\DataTypeTok{interval=}\StringTok{'predict'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+       fit       lwr      upr
+1 1.868497 0.5885697 3.148424
+\end{verbatim}
+
+Chapter 9 review questions: 16 (5pts): A study by Scrogin et al. was
+designed to assess the effects of concurrent manipulations of dietary
+NaCl and calcium on blood pressure as well as blood pressure and
+catecholamine responses to stress. Subjects were salt-sensitive,
+spontaneously hypertensive male rats. Among the analyses performed by
+the investigators was a correlation between baseline blood pressure and
+plasma epinephrine concentration (E). The following data on these two
+variables were collected. Let \(\alpha\) = 0.01.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{REV16 =}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"REV_C09_16.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Parsed with column specification:
+cols(
+  BP = col_double(),
+  PLASMAE = col_double()
+)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{scatterplot}\NormalTok{(PLASMAE}\OperatorTok{~}\NormalTok{BP, }\DataTypeTok{data=}\NormalTok{REV16, }\DataTypeTok{boxplots=}\NormalTok{F )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{Regression.Model.REV16 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(PLASMAE}\OperatorTok{~}\NormalTok{BP, }\DataTypeTok{data=}\NormalTok{REV16)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{summary}\NormalTok{(Regression.Model.REV16)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = PLASMAE ~ BP, data = REV16)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-228.26  -61.31    4.56   60.60  334.18 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)   
+(Intercept) -510.156    203.888  -2.502  0.01870 * 
+BP             4.389      1.195   3.673  0.00104 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 112.4 on 27 degrees of freedom
+Multiple R-squared:  0.3332,    Adjusted R-squared:  0.3085 
+F-statistic: 13.49 on 1 and 27 DF,  p-value: 0.001044
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{residual.analysis}\NormalTok{(Regression.Model.REV16)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-5-2.pdf}
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-5-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{coef}\NormalTok{(Regression.Model.REV16)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+(Intercept)          BP 
+-510.155626    4.389384 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{confint}\NormalTok{(Regression.Model.REV16,}\DataTypeTok{level =} \FloatTok{0.99}\NormalTok{) }\CommentTok{#These are confidence intervals on the coeefficients of the model}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                  0.5 %    99.5 %
+(Intercept) -1075.06598 54.754725
+BP              1.07824  7.700528
+\end{verbatim}
+
+There is enough evidence to conclude that there is a positive
+relationship between blood pressure and plasma. The confidence interval
+(alpha=0.01) is entirely above zero.
+
+18 (5pts): Run both parametric and non-parametric correlations and
+comment on the differences seen. Maria Mathias conducted a study of
+hyperactive children. She measured the children's attitude,
+hyperactivity, and social behavior before and after treatment. The
+following table shows the 31 subjects the age and improvement scores
+from pre-treatment to post-treatment for attitude (ATT), social behavior
+(SOC), and hyperactivity (HYP). A negative score for HYP indicates an
+improvemnent in hyperactivity; a positive score in ATT or SOC indicates
+improvement. Perform an analysis to determine if there is evidence to
+indicate that age (years) is correlated with any of the three outcome
+variables. Let \(\alpha\) = 0.05 for all tests.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{CHILD =}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"REV_C09_18.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Parsed with column specification:
+cols(
+  SUBJECT = col_integer(),
+  AGE = col_integer(),
+  ATT = col_double(),
+  HYP = col_double(),
+  SOC = col_double()
+)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{scatterplot}\NormalTok{(ATT}\OperatorTok{~}\NormalTok{AGE, }\DataTypeTok{data=}\NormalTok{CHILD, }\DataTypeTok{boxplots=}\NormalTok{F )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{scatterplot}\NormalTok{(HYP}\OperatorTok{~}\NormalTok{AGE, }\DataTypeTok{data=}\NormalTok{CHILD, }\DataTypeTok{boxplots=}\NormalTok{F )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-6-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{scatterplot}\NormalTok{(SOC}\OperatorTok{~}\NormalTok{AGE, }\DataTypeTok{data=}\NormalTok{CHILD, }\DataTypeTok{boxplots=}\NormalTok{F )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-6-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{Regression.Model.ATT <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(ATT}\OperatorTok{~}\NormalTok{AGE, }\DataTypeTok{data=}\NormalTok{CHILD)}
+\OperatorTok{>}\StringTok{ }\NormalTok{Regression.Model.HYP <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(ATT}\OperatorTok{~}\NormalTok{HYP, }\DataTypeTok{data=}\NormalTok{CHILD)}
+\OperatorTok{>}\StringTok{ }\NormalTok{Regression.Model.SOC <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(ATT}\OperatorTok{~}\NormalTok{SOC, }\DataTypeTok{data=}\NormalTok{CHILD)}
+\OperatorTok{>}\StringTok{ }
+\ErrorTok{>}\StringTok{ }\KeywordTok{summary}\NormalTok{(Regression.Model.ATT)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = ATT ~ AGE, data = CHILD)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.45208 -0.23275  0.05549  0.44792  0.74792 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)  
+(Intercept) -1.06386    0.60674  -1.753   0.0901 .
+AGE          0.14621    0.06239   2.344   0.0262 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.6413 on 29 degrees of freedom
+Multiple R-squared:  0.1592,    Adjusted R-squared:  0.1302 
+F-statistic: 5.493 on 1 and 29 DF,  p-value: 0.02616
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{summary}\NormalTok{(Regression.Model.HYP)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = ATT ~ HYP, data = CHILD)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.57024 -0.31971  0.08029  0.57524  1.00954 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)  
+(Intercept)  0.30960    0.14754   2.098   0.0447 *
+HYP         -0.05054    0.17322  -0.292   0.7725  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.6984 on 29 degrees of freedom
+Multiple R-squared:  0.002927,  Adjusted R-squared:  -0.03146 
+F-statistic: 0.08512 on 1 and 29 DF,  p-value: 0.7725
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{summary}\NormalTok{(Regression.Model.SOC)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = ATT ~ SOC, data = CHILD)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.42682 -0.49184  0.05539  0.52901  0.99650 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   0.2268     0.1509   1.503    0.144
+SOC           0.2945     0.2458   1.198    0.241
+
+Residual standard error: 0.6828 on 29 degrees of freedom
+Multiple R-squared:  0.04715,   Adjusted R-squared:  0.0143 
+F-statistic: 1.435 on 1 and 29 DF,  p-value: 0.2406
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{residual.analysis}\NormalTok{(Regression.Model.ATT)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-6-4.pdf}
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-6-5.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{residual.analysis}\NormalTok{(Regression.Model.HYP)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-6-6.pdf}
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-6-7.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{residual.analysis}\NormalTok{(Regression.Model.SOC)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-6-8.pdf}
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-6-9.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{coef}\NormalTok{(Regression.Model.ATT)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+(Intercept)         AGE 
+ -1.0638584   0.1462149 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{coef}\NormalTok{(Regression.Model.HYP)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+(Intercept)         HYP 
+ 0.30959760 -0.05053772 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{coef}\NormalTok{(Regression.Model.SOC)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+(Intercept)         SOC 
+  0.2268208   0.2944644 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{confint}\NormalTok{(Regression.Model.ATT,}\DataTypeTok{level =} \FloatTok{0.95}\NormalTok{) }\CommentTok{#These are confidence intervals on the coeefficients of the model}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                  2.5 %    97.5 %
+(Intercept) -2.30478406 0.1770673
+AGE          0.01861667 0.2738131
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{confint}\NormalTok{(Regression.Model.HYP,}\DataTypeTok{level =} \FloatTok{0.95}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                   2.5 %    97.5 %
+(Intercept)  0.007844773 0.6113504
+HYP         -0.404810244 0.3037348
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{confint}\NormalTok{(Regression.Model.SOC,}\DataTypeTok{level =} \FloatTok{0.95}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                  2.5 %    97.5 %
+(Intercept) -0.08189295 0.5355346
+SOC         -0.20825952 0.7971884
+\end{verbatim}
+
+There is sufficient evidence to conclude that there is a relationship
+between attitude and age. However, there was not sufficient evidence to
+conclude that there was a relationship between either of the other
+characteristics and age at the 0.05 level. The following code block
+executes the non-parametric tests. For the Spearman test, the critical
+characteristic below which the null will be rejected is 0.3059 (n=31,
+alpha=0.05). This value is obtained from table P in appendix A.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{cat}\NormalTok{(}\StringTok{'Attitude w/ pearson:'}\NormalTok{); }\KeywordTok{cor}\NormalTok{(ATT}\OperatorTok{~}\NormalTok{AGE,}\DataTypeTok{data=}\NormalTok{CHILD,}\DataTypeTok{method=}\StringTok{'pearson'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Attitude w/ pearson:
+\end{verbatim}
+
+\begin{verbatim}
+[1] 0.3990489
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{cat}\NormalTok{(}\StringTok{'Hyperactivity w/ pearson:'}\NormalTok{); }\KeywordTok{cor}\NormalTok{(HYP}\OperatorTok{~}\NormalTok{AGE,}\DataTypeTok{data=}\NormalTok{CHILD,}\DataTypeTok{method=}\StringTok{'pearson'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Hyperactivity w/ pearson:
+\end{verbatim}
+
+\begin{verbatim}
+[1] 0.01019513
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{cat}\NormalTok{(}\StringTok{'Social behavior w/ pearson:'}\NormalTok{); }\KeywordTok{cor}\NormalTok{(SOC}\OperatorTok{~}\NormalTok{AGE,}\DataTypeTok{data=}\NormalTok{CHILD,}\DataTypeTok{method=}\StringTok{'pearson'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Social behavior w/ pearson:
+\end{verbatim}
+
+\begin{verbatim}
+[1] -0.1851589
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{cat}\NormalTok{(}\StringTok{'}\CharTok{\textbackslash{}n}\StringTok{Attitude w/ spearman:'}\NormalTok{); }\KeywordTok{cor}\NormalTok{(ATT}\OperatorTok{~}\NormalTok{AGE,}\DataTypeTok{data=}\NormalTok{CHILD,}\DataTypeTok{method=}\StringTok{'spearman'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Attitude w/ spearman:
+\end{verbatim}
+
+\begin{verbatim}
+[1] 0.4719065
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{cat}\NormalTok{(}\StringTok{'Hyperactivity w/ spearman:'}\NormalTok{); }\KeywordTok{cor}\NormalTok{(HYP}\OperatorTok{~}\NormalTok{AGE,}\DataTypeTok{data=}\NormalTok{CHILD,}\DataTypeTok{method=}\StringTok{'spearman'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Hyperactivity w/ spearman:
+\end{verbatim}
+
+\begin{verbatim}
+[1] -0.2542715
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{cat}\NormalTok{(}\StringTok{'Social behavior w/ spearman:'}\NormalTok{); }\KeywordTok{cor}\NormalTok{(SOC}\OperatorTok{~}\NormalTok{AGE,}\DataTypeTok{data=}\NormalTok{CHILD,}\DataTypeTok{method=}\StringTok{'spearman'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Social behavior w/ spearman:
+\end{verbatim}
+
+\begin{verbatim}
+[1] -0.1454142
+\end{verbatim}
+
+Using the spearman test, both hyperactivity and social behavior had test
+statistics below the critical value and are considered significant.
+Interestingly, this result is flipped from the parametric test for every
+measure.
+
+20 (5pts) The following are the pulmonary blood flow (PBF) and pulmonary
+blood volume (PBV) values recorded for 16 infants and children with
+congenital heart desease. Find the regression equation describing the
+linear relationship between the two variables, compute \(r^2\), and test
+\(H_0:\beta = 0\) by both the F test and the t test. Let \(\alpha\) =
+0.05.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{Pulmonary =}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"REV_C09_20.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Parsed with column specification:
+cols(
+  PBV = col_integer(),
+  PBF = col_double()
+)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{Regression.Model.PB <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(PBF}\OperatorTok{~}\NormalTok{PBV,}\DataTypeTok{data=}\NormalTok{Pulmonary)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{summary}\NormalTok{(Regression.Model.PB)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = PBF ~ PBV, data = Pulmonary)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.4389 -3.5963  0.1949  3.3508  6.7782 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)   
+(Intercept) -0.028332   3.267897  -0.009  0.99320   
+PBV          0.025119   0.008331   3.015  0.00927 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.262 on 14 degrees of freedom
+Multiple R-squared:  0.3937,    Adjusted R-squared:  0.3504 
+F-statistic: 9.091 on 1 and 14 DF,  p-value: 0.009269
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{residual.analysis}\NormalTok{(Regression.Model.PB)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-8-1.pdf}
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-8-2.pdf}
+
+The equation is PBF = 0.025PBV -0.028; \(r^2\) = 0.3937. The F and p
+value are 9.091 and 0.0093 respectively at the \(\alpha = 0.05\) level
+of significance which means that there is sufficient evidence to reject
+the null hypothesis in this case.
+
+13.10.4 (5pts): Show a scatterplot as well as doing the test. Refer to
+Exercise 13.10.3. Nozawa et al. also calculated the Japanese Orthopaedic
+Association score for measuring back pain (JOA). The results for the 20
+subjects along with the duration of follow-up are shown in the following
+table. The higher the number, the lesser the degree of pain. Can we
+conclude from these data that in general there is a relationship between
+length of follow-up and JOA score at the time of the operation? Let
+\(\alpha\) = 0.05.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{backpain =}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"EXR_C13_S10_04.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Parsed with column specification:
+cols(
+  MONTHS = col_integer(),
+  JOA = col_integer()
+)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{scatterplot}\NormalTok{(JOA}\OperatorTok{~}\NormalTok{MONTHS, }\DataTypeTok{data=}\NormalTok{backpain, }\DataTypeTok{boxplots=}\NormalTok{F )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{cat}\NormalTok{(}\StringTok{'JOA score w/ spearman non-parametric:'}\NormalTok{); }\KeywordTok{cor}\NormalTok{(JOA}\OperatorTok{~}\NormalTok{MONTHS,}\DataTypeTok{data=}\NormalTok{backpain,}\DataTypeTok{method=}\StringTok{'spearman'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+JOA score w/ spearman non-parametric:
+\end{verbatim}
+
+\begin{verbatim}
+[1] -0.1047632
+\end{verbatim}
+
+There are 20 observations in this data. With an \(\alpha = 0.05\)
+confidence level, and using table P in the appendix, the critical
+statistic value was found to be 0.3789. The value obtained was lower
+than this, leading us to reject the null hypothesis that there is no
+relationship between the JOA score and the duration of follow up.
+
+3 predictors: 10.3.2, 10.4.2, 10.5.2 all use 10.3.2 data (10pts) Family
+caregiving of older adults is more common in Korea than in the United
+States. Son et al. studied 100 caregivers of older adults with dementia
+in Seoul, South Korea. The dependent variable was caregiver burden as
+measured by the Korean Burden Inventory (KBI). Scores ranged from 28 to
+140, with higher scores indicating higher burden. Explanatory variables
+were indexes that measured the following:
+
+ADL: Total activites of daily living (low scores indicate that the
+elderly perform activities independently).
+
+MEM: Memory and behavioral problems (higher scores indicate more
+problems).
+
+COG: Cognitive impairment (lower scores indicate a greater degree of
+cognitive impairment).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{care <-}\StringTok{ }
+\OperatorTok{+}\StringTok{   }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"EXR_C10_S03_02.csv"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }
+\ErrorTok{>}\StringTok{ }\KeywordTok{scatterplotMatrix}\NormalTok{(}\OperatorTok{~}\NormalTok{KBI}\OperatorTok{+}\NormalTok{ADL}\OperatorTok{+}\NormalTok{MEM}\OperatorTok{+}\NormalTok{COG, }\DataTypeTok{smooth=}\OtherTok{FALSE}\NormalTok{, }
+\OperatorTok{+}\StringTok{   }\DataTypeTok{diagonal =} \StringTok{'density'}\NormalTok{, }\DataTypeTok{data=}\NormalTok{care)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in applyDefaults(diagonal, defaults = list(method =
+"adaptiveDensity"), : unnamed diag arguments, will be ignored
+\end{verbatim}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{RegModel.care <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(KBI}\OperatorTok{~}\NormalTok{ADL}\OperatorTok{+}\NormalTok{MEM}\OperatorTok{+}\NormalTok{COG, }\DataTypeTok{data=}\NormalTok{care)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{residual.analysis}\NormalTok{(RegModel.care)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-10-2.pdf}
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-10-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{summary}\NormalTok{(RegModel.care)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = KBI ~ ADL + MEM + COG, data = care)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-42.037 -10.535  -1.503   9.213  43.151 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  40.4908    10.1030   4.008 0.000121 ***
+ADL           0.2162     0.1168   1.851 0.067273 .  
+MEM           0.5547     0.1300   4.267 4.65e-05 ***
+COG           0.1210     0.3003   0.403 0.687978    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 17.26 on 96 degrees of freedom
+Multiple R-squared:  0.282, Adjusted R-squared:  0.2596 
+F-statistic: 12.57 on 3 and 96 DF,  p-value: 5.315e-07
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{cor}\NormalTok{(care[,}\KeywordTok{c}\NormalTok{(}\StringTok{"KBI"}\NormalTok{,}\StringTok{"ADL"}\NormalTok{,}\StringTok{"MEM"}\NormalTok{,}\StringTok{"COG"}\NormalTok{)], }\DataTypeTok{use=}\StringTok{"complete"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+           KBI        ADL        MEM        COG
+KBI  1.0000000  0.3798958  0.5019905 -0.2757502
+ADL  0.3798958  1.0000000  0.4557426 -0.6470085
+MEM  0.5019905  0.4557426  1.0000000 -0.4297546
+COG -0.2757502 -0.6470085 -0.4297546  1.0000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{partial.cor}\NormalTok{(care[,}\KeywordTok{c}\NormalTok{(}\StringTok{"KBI"}\NormalTok{,}\StringTok{"ADL"}\NormalTok{,}\StringTok{"MEM"}\NormalTok{,}\StringTok{"COG"}\NormalTok{)], }\DataTypeTok{use=}\StringTok{"complete"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+ Partial correlations:
+        KBI      ADL      MEM      COG
+KBI 0.00000  0.18561  0.39928  0.04108
+ADL 0.18561  0.00000  0.15840 -0.55873
+MEM 0.39928  0.15840  0.00000 -0.19846
+COG 0.04108 -0.55873 -0.19846  0.00000
+
+ Number of observations: 100 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{newdata =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{ADL=}\KeywordTok{c}\NormalTok{(}\DecValTok{95}\NormalTok{), }\DataTypeTok{MEM=}\KeywordTok{c}\NormalTok{(}\DecValTok{35}\NormalTok{), }\DataTypeTok{COG=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{))}
+\OperatorTok{>}\StringTok{ }\CommentTok{# This creates a point at which we're interested in the intervals. Note that a }
+\ErrorTok{>}\StringTok{ }\CommentTok{# list of points could be defined with newdata = data.frame(X=c(1,2,3))}
+\ErrorTok{>}\StringTok{ }\KeywordTok{predict}\NormalTok{(RegModel.care,newdata,}\DataTypeTok{interval =} \StringTok{'confidence'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+       fit      lwr      upr
+1 80.44049 72.60566 88.27533
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{predict}\NormalTok{(RegModel.care,newdata,}\DataTypeTok{interval=}\StringTok{'predict'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+       fit      lwr      upr
+1 80.44049 45.29739 115.5836
+\end{verbatim}
+
+R insisted that I have a value for all three independent variables to
+construct intervals. Only two are given in the problem statement. I
+expect that one of the three `COG' is not significant and is to be
+excluded. I'm not sure how to do this in R.
+
+A. Calculate the coefficient of multiple determination B. Perform an
+analysis of variance C. Test the significance of each
+\(\beta_i\)(i\textgreater{}0). Let \(\alpha\) = 0.05 for all tests of
+significance and determine the p value for all tests
+
+D. Construct a 95 percent confidence interval for each significant
+sample slope.
+
+E. Compute the y value and construct a 95 percent confidence and 95
+percent prediction interval for \(x_1j\)=95 and \(x_2j\)=35.
+
+6 predictors: 10.3.6, 10.4.6, 10.5.6 All use 10.3.6 data (10pts) The
+following data were collected on a simple random sample of 20 patients
+with hypertension. The variables are Y = mean arterial blood pressure
+(mmHg) \(X_1\)=age(years) \(X_2\)=weight(kg) \(X_3\)=body surface
+area(\(m^2\)) \(X_4\)=duration of hypertension(years) \(X_5\)=basal
+bulse(bpm) \(X_6\)=measure of stress A. Calcultate the coefficient of
+multiple determination B. Perform an analysis of variance C. Test the
+significance of each \(\beta_i\)(i\textgreater{}0). Let \(\alpha\) =
+0.05 for all tests of significance and determine the p value for all
+tests D. Construct a 95 percent confidence interval for each significant
+sample slope. E. Compute the y value and construct a 95 percent
+confidence and 95 percent prediction interval for \(x_1j\)=50
+\(x_2j\)=95 \(x_3j\)=2.00 \(x_4j\)=6.00 \(x_5j\)=75 \(x_6j\)=70
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{hypertension <-}\StringTok{ }
+\OperatorTok{+}\StringTok{   }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"EXR_C10_S03_06.csv"}\NormalTok{)}
+\OperatorTok{>}\StringTok{ }
+\ErrorTok{>}\StringTok{ }\KeywordTok{scatterplotMatrix}\NormalTok{(}\OperatorTok{~}\NormalTok{Y}\OperatorTok{+}\NormalTok{X1}\OperatorTok{+}\NormalTok{X2}\OperatorTok{+}\NormalTok{X3}\OperatorTok{+}\NormalTok{X4}\OperatorTok{+}\NormalTok{X5}\OperatorTok{+}\NormalTok{X6, }\DataTypeTok{smooth=}\OtherTok{FALSE}\NormalTok{, }
+\OperatorTok{+}\StringTok{   }\DataTypeTok{diagonal =} \StringTok{'density'}\NormalTok{, }\DataTypeTok{data=}\NormalTok{hypertension)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in applyDefaults(diagonal, defaults = list(method =
+"adaptiveDensity"), : unnamed diag arguments, will be ignored
+\end{verbatim}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{RegModel.hypertension <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Y}\OperatorTok{~}\NormalTok{X1}\OperatorTok{+}\NormalTok{X2}\OperatorTok{+}\NormalTok{X3}\OperatorTok{+}\NormalTok{X4}\OperatorTok{+}\NormalTok{X5}\OperatorTok{+}\NormalTok{X6, }\DataTypeTok{data=}\NormalTok{hypertension)}
+\OperatorTok{>}\StringTok{ }\KeywordTok{residual.analysis}\NormalTok{(RegModel.hypertension)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-12-2.pdf}
+\includegraphics{Homework_8_files/figure-latex/unnamed-chunk-12-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{summary}\NormalTok{(RegModel.hypertension)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = Y ~ X1 + X2 + X3 + X4 + X5 + X6, data = hypertension)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.93213 -0.11314  0.03064  0.21834  0.48454 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -12.870476   2.556650  -5.034 0.000229 ***
+X1            0.703259   0.049606  14.177 2.76e-09 ***
+X2            0.969920   0.063108  15.369 1.02e-09 ***
+X3            3.776491   1.580151   2.390 0.032694 *  
+X4            0.068383   0.048441   1.412 0.181534    
+X5           -0.084485   0.051609  -1.637 0.125594    
+X6            0.005572   0.003412   1.633 0.126491    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4072 on 13 degrees of freedom
+Multiple R-squared:  0.9962,    Adjusted R-squared:  0.9944 
+F-statistic: 560.6 on 6 and 13 DF,  p-value: 6.395e-15
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{cor}\NormalTok{(hypertension[,}\KeywordTok{c}\NormalTok{(}\StringTok{"X1"}\NormalTok{,}\StringTok{"X2"}\NormalTok{,}\StringTok{"X3"}\NormalTok{,}\StringTok{"X4"}\NormalTok{,}\StringTok{"X5"}\NormalTok{,}\StringTok{"X6"}\NormalTok{)], }\DataTypeTok{use=}\StringTok{"complete"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+          X1         X2         X3        X4        X5         X6
+X1 1.0000000 0.40734926 0.37845460 0.3437921 0.6187643 0.36822369
+X2 0.4073493 1.00000000 0.87530481 0.2006496 0.6593399 0.03435475
+X3 0.3784546 0.87530481 1.00000000 0.1305400 0.4648188 0.01844634
+X4 0.3437921 0.20064959 0.13054001 1.0000000 0.4015144 0.31163982
+X5 0.6187643 0.65933987 0.46481881 0.4015144 1.0000000 0.50631008
+X6 0.3682237 0.03435475 0.01844634 0.3116398 0.5063101 1.00000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{partial.cor}\NormalTok{(hypertension[,}\KeywordTok{c}\NormalTok{(}\StringTok{"X1"}\NormalTok{,}\StringTok{"X2"}\NormalTok{,}\StringTok{"X3"}\NormalTok{,}\StringTok{"X4"}\NormalTok{,}\StringTok{"X5"}\NormalTok{,}\StringTok{"X6"}\NormalTok{)], }\DataTypeTok{use=}\StringTok{"complete"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+ Partial correlations:
+         X1       X2       X3       X4       X5       X6
+X1  0.00000 -0.18401  0.24192  0.12969  0.40146  0.01842
+X2 -0.18401  0.00000  0.85554  0.01133  0.68196 -0.42531
+X3  0.24192  0.85554  0.00000 -0.03695 -0.42937  0.22779
+X4  0.12969  0.01133 -0.03695  0.00000  0.13724  0.10166
+X5  0.40146  0.68196 -0.42937  0.13724  0.00000  0.56856
+X6  0.01842 -0.42531  0.22779  0.10166  0.56856  0.00000
+
+ Number of observations: 20 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{newdata =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{X1=}\KeywordTok{c}\NormalTok{(}\DecValTok{50}\NormalTok{),}\DataTypeTok{X2=}\KeywordTok{c}\NormalTok{(}\DecValTok{95}\NormalTok{),}\DataTypeTok{X3=}\KeywordTok{c}\NormalTok{(}\FloatTok{2.00}\NormalTok{),}\DataTypeTok{X4=}\KeywordTok{c}\NormalTok{(}\FloatTok{6.00}\NormalTok{),}\DataTypeTok{X5=}\KeywordTok{c}\NormalTok{(}\DecValTok{75}\NormalTok{),}\DataTypeTok{X6=}\KeywordTok{c}\NormalTok{(}\DecValTok{70}\NormalTok{))}
+\OperatorTok{>}\StringTok{ }\CommentTok{# This creates a point at which we're interested in the intervals. Note that a }
+\ErrorTok{>}\StringTok{ }\CommentTok{# list of points could be defined with newdata = data.frame(X=c(1,2,3))}
+\ErrorTok{>}\StringTok{ }\KeywordTok{predict}\NormalTok{(RegModel.hypertension,newdata,}\DataTypeTok{interval =} \StringTok{'confidence'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+       fit      lwr      upr
+1 116.4518 116.0167 116.8869
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{predict}\NormalTok{(RegModel.hypertension,newdata,}\DataTypeTok{interval=}\StringTok{'predict'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+       fit      lwr      upr
+1 116.4518 115.4703 117.4333
+\end{verbatim}
+
+I think that his problem also suffers from the fact that I'm unsure how
+to eliminate factors that are not significant. I think that would
+substantially change my results.
+
+
+\end{document}

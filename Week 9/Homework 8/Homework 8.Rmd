@@ -2,7 +2,9 @@
 title: "Homework 8"
 author: "Glenn Clapp"
 date: "`r as.character(Sys.Date())`"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r echo=FALSE, message=F, warning=F}
@@ -62,8 +64,8 @@ Refer to Exercise 9.3.4 and let X = 1.6
 newdata = data.frame(X=1.6) 
 # This creates a point at which we're interested in the intervals. Note that a 
 # list of points could be defined with newdata = data.frame(X=c(1,2,3))
-predict(Regression.Model,newdata,interval = 'confidence')
-predict(Regression.Model,newdata,interval='predict')
+predict(Regression.Model,newdata,interval = 'confidence')#If I took another sample of similar size, the regression line would fall in this interval
+predict(Regression.Model,newdata,interval='predict')#If I took one more observation at the given level, the observation would fall in this interval.
 ```
 Chapter 9 review questions:
 16 (5pts):
@@ -147,6 +149,7 @@ Refer to Exercise 13.10.3. Nozawa et al. also calculated the Japanese Orthopaedi
 backpain = read_csv("EXR_C13_S10_04.csv")
 scatterplot(JOA~MONTHS, data=backpain, boxplots=F )
 cat('JOA score w/ spearman non-parametric:'); cor(JOA~MONTHS,data=backpain,method='spearman')
+#should be: with(Ex13.10.4, cor.test(JOA, MONTHS, alternative="two.sided", method="spearman"))
 ```
 
 There are 20 observations in this data. With an $\alpha = 0.05$ confidence level, and using table P in the appendix, the critical statistic value was found to be 0.3789. The value obtained was lower than this, leading us to reject the null hypothesis that there is no relationship between the JOA score and the duration of follow up.
@@ -170,6 +173,8 @@ scatterplotMatrix(~KBI+ADL+MEM+COG, smooth=FALSE,
 RegModel.care <- lm(KBI~ADL+MEM+COG, data=care)
 residual.analysis(RegModel.care)
 summary(RegModel.care)
+#To drop cog
+#Regmodel.care.2 = <- lm(KBI~ADL+MEM, data=care)
 
 cor(care[,c("KBI","ADL","MEM","COG")], use="complete")
 partial.cor(care[,c("KBI","ADL","MEM","COG")], use="complete")
